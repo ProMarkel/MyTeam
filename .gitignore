@@ -1,0 +1,4 @@
+# 不纳入版本同步的本地/归档/履历目录
+.workbuddy/
+archive/
+cvs/

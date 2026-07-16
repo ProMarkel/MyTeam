@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LSG Team · 老司机小队 | 休闲模拟经营+ 独立小队</title>
+<style>
+:root{
+  --bg:#f8f9fb; --card:#ffffff; --card2:#fbfcfe;
+  --line:#e8ecf1; --line2:#dde3ec;
+  --txt:#2c3e50; --mut:#6b7b8d; --mut2:#9aa3b0;
+  --side1:#1a1a2e; --side2:#0f3460;
+  --accent:#4a6cf7; --accent-l:#eef1ff; --accent-d:#2e4fd0;
+  --cyan:#64ffda; --gold:#f0a500;
+  --red:#e74c3c; --grn:#27ae60; --org:#f39c12; --teal:#1abc9c; --pur:#8e44ad; --pink:#e84393;
+  --r:10px;
+  --shadow:0 1px 3px rgba(0,0,0,.06); --shadow-lg:0 4px 20px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* sidebar */
+.side{width:248px;flex:0 0 248px;background:linear-gradient(170deg,var(--side1),var(--side2));border-right:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column}
+.brand{padding:22px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand .logo{display:flex;align-items:center;gap:10px}
+.brand .mk{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#c0812f);display:flex;align-items:center;justify-content:center;font-weight:700;color:#1a1206;font-size:12px}
+.brand h1{font-size:15px;font-weight:600;letter-spacing:.5px;color:#fff}
+.brand .sub{font-size:11px;color:#8892b0;margin-top:3px}
+.nav{padding:12px 10px;flex:1;overflow-y:auto}
+.nav a{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:9px;color:#aeb6c8;text-decoration:none;font-size:13.5px;cursor:pointer;transition:.15s;margin-bottom:3px}
+.nav a .ic{width:18px;text-align:center;opacity:.8}
+.nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav a.active{background:linear-gradient(90deg,rgba(74,108,247,.30),rgba(74,108,247,.06));color:#fff;border-left:3px solid var(--accent);padding-left:10px}
+.side .foot{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:#6b7280;line-height:1.5}
+
+/* content */
+.main{flex:1;overflow-y:auto;padding:34px 46px 60px;background:var(--bg)}
+.sec{display:none;max-width:1280px;margin:0 auto;animation:fade .25s ease}
+.sec.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec h2{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:.5px;color:var(--txt);padding-left:14px;border-left:4px solid var(--accent)}
+.sec .lead{color:var(--mut);font-size:13px;margin-bottom:22px;margin-left:18px}
+.tag{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;border:1px solid var(--line2);color:var(--mut);margin-left:8px;vertical-align:middle}
+.tag.gold{color:var(--gold);border-color:rgba(240,165,0,.4)}
+.tag.tpl{color:var(--teal);border-color:rgba(26,188,156,.4)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:16px;box-shadow:var(--shadow);transition:box-shadow .2s}
+.card:hover{box-shadow:var(--shadow-lg)}
+.card h3{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--accent)}
+.card p{color:var(--txt);margin-bottom:8px;font-size:13.5px}
+.card p:last-child{margin-bottom:0}
+.mut{color:var(--mut)}
+.pill{display:inline-block;background:var(--accent-l);border:1px solid #d6defb;border-radius:6px;padding:2px 8px;font-size:12px;color:var(--accent-d);margin:2px 4px 2px 0}
+
+/* hero */
+.hero{background:linear-gradient(135deg,#1a1a2e,#16213e 50%,#0f3460);border-radius:16px;padding:30px 32px;margin-bottom:22px;color:#fff}
+.hero h2{font-size:26px;margin-bottom:8px;color:#fff;border:none;padding:0}
+.hero .tagline{font-size:15px;color:var(--cyan);margin-bottom:14px;font-weight:500}
+.hero p{color:#c3c9da;max-width:920px;font-size:13.5px;line-height:1.7}
+.hero b{color:#fff}
+.statrow{display:flex;gap:56px;margin-top:22px;flex-wrap:wrap}
+.stat .n{font-size:22px;font-weight:700;color:var(--cyan)}
+.stat .l{font-size:11.5px;color:#8892b0;margin-top:2px}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.hero-pills .pill{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);color:#e6ebf5}
+
+/* market insight list */
+.opp{border-left:4px solid var(--accent);padding:6px 0 6px 16px;margin-bottom:16px}
+.opp .t{font-weight:600;color:var(--txt);margin-bottom:3px;font-size:14px}
+.opp .d{color:var(--mut);font-size:13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}.main{padding:24px 20px}.side{width:200px;flex-basis:200px}}
+
+/* team cards (collapsible) */
+details.mem{border:1px solid var(--line);border-radius:var(--r);background:var(--card);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
+details.mem[open]{border-color:var(--line2)}
+details.mem summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;align-items:center;gap:14px}
+details.mem summary::-webkit-details-marker{display:none}
+.ava{width:42px;height:42px;border-radius:10px;background:var(--accent-l);display:flex;align-items:center;justify-content:center;font-weight:600;color:var(--accent-d);font-size:16px;flex:0 0 42px}
+.mem .nm{font-weight:600;font-size:14.5px;color:var(--txt);display:flex;align-items:baseline}
+.mem .nm .star{color:var(--gold);margin-left:5px;font-size:13px;font-weight:700}
+.mem .nm .n{font-weight:600;font-size:14.5px;color:var(--txt);min-width:56px}
+
+.mem .nn{font-weight:400;font-size:12.5px;color:var(--mut);margin-left:6px}
+.mem .rl{margin-left:8px;font-size:12px;color:var(--accent)}
+.mem .bio{font-size:12.5px;color:var(--mut);margin-top:2px}
+.mem .cv{font-size:11px;color:var(--teal);margin-left:auto;white-space:nowrap}
+.mem .ar{transition:.2s;color:var(--mut);margin-left:6px}
+details.mem[open] .ar{transform:rotate(90deg)}
+.membody{padding:8px 0 18px 0!important;border-top:1px solid var(--line)}
+.membody .pts{margin:2px 0 0;padding-left:18px!important}
+.membody .pts .li{position:relative;padding-left:1.3em!important;margin-bottom:7px;font-size:13px;color:var(--txt);line-height:1.62;text-indent:-1.3em!important}
+/* 成员卡片按岗位配色：折叠态浅色底 + 深色字，展开态白底不变 */
+details.mem.role-prod summary{background:#fff1e6}
+details.mem.role-design summary{background:#e9f7ef}
+details.mem.role-dev summary{background:#e7f1fb}
+details.mem.role-art summary{background:#f3ebfb}
+details.mem summary{color:#222}
+details.mem summary .bio{color:#555}
+details.mem.role-prod summary .ava{background:#ffd8a8;color:#d9480f}
+details.mem.role-design summary .ava{background:#b2f2bb;color:#2b8a3e}
+details.mem.role-dev summary .ava{background:#a5d8ff;color:#1971c2}
+details.mem.role-art summary .ava{background:#d0bfff;color:#6741a8}
+details.mem.role-prod summary .rl{color:#d9480f}
+details.mem.role-design summary .rl{color:#2b8a3e}
+details.mem.role-dev summary .rl{color:#1971c2}
+details.mem.role-art summary .rl{color:#6741a8}
+
+/* workflow */
+.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:6px 0 16px}
+.step{background:var(--card);border:1px solid var(--line2);border-radius:10px;padding:12px 14px;flex:1;min-width:120px;margin:4px;box-shadow:var(--shadow)}
+.step .sn{font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600}
+.step .st{font-size:13px;font-weight:600;color:var(--txt)}
+.step .tool{display:block;margin-top:3px;font-size:10px;font-weight:600;color:var(--accent);background:var(--accent-l);border-radius:5px;padding:1px 6px;width:fit-content;line-height:1.5}
+
+.warn{background:#fce4ec;border:1px solid rgba(231,76,60,.25);border-left:4px solid var(--red);border-radius:8px;padding:12px 16px;font-size:12.5px;color:#c0392b;margin-bottom:16px}
+.note{background:var(--accent-l);border:1px solid rgba(74,108,247,.25);border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px;font-size:12.5px;color:var(--accent-d);margin-bottom:16px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.btn{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;font-weight:600;padding:10px 18px;border-radius:9px;text-decoration:none;font-size:13px}
+.btn.ghost{background:transparent;border:1px solid var(--line2);color:var(--txt)}
+.placeholder{color:var(--mut2);font-style:italic}
+a.doclink{color:var(--accent);text-decoration:none;border-bottom:1px dashed rgba(74,108,247,.5)}
+a.doclink:hover{color:var(--accent-d)}
+
+/* ── Reference-style components (for 市场机会洞悉) ── */
+.section{margin-bottom:34px}
+.section-title{font-size:20px;font-weight:700;margin-bottom:18px;padding-left:14px;border-left:4px solid var(--accent);display:flex;align-items:center;gap:10px}
+.section-title .emoji{font-size:22px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:18px}
+.card-header{padding:18px 22px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line)}
+.card-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.card-title{font-size:16px;font-weight:700;color:var(--txt)}
+.card-subtitle{font-size:12px;color:var(--mut);margin-top:2px}
+.card-body{padding:18px 22px}
+.card-body p{margin-bottom:10px;font-size:14px}
+.card-body p:last-child{margin-bottom:0}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;margin-right:6px;margin-bottom:4px}
+.badge-s{background:#e8f5e9;color:#2e7d32}
+.badge-a{background:#e3f2fd;color:#1565c0}
+.badge-b{background:#fff3e0;color:#e65100}
+.badge-c{background:#fce4ec;color:#c62828}
+.badge-explore{background:#f3e5f5;color:#6a1b9a}
+.feasibility-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 14px;border-radius:20px;font-size:13px;font-weight:700}
+.feasibility-s{background:#e8f5e9;color:#2e7d32}
+.feasibility-a{background:#e3f2fd;color:#1565c0}
+.feasibility-b{background:#fff3e0;color:#e65100}
+.feasibility-c{background:#fce4ec;color:#c62828}
+.score-row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.score-label{font-size:12px;color:var(--mut);width:70px;flex-shrink:0}
+.score-bar-bg{flex:1;height:8px;background:#eef2f7;border-radius:4px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:4px}
+.score-val{font-size:12px;font-weight:700;width:32px;text-align:right;color:var(--txt)}
+.tip-box{padding:14px 18px;border-radius:8px;margin:16px 0;font-size:13px;line-height:1.6}
+.tip-success{background:#e8f5e9;border-left:4px solid var(--grn)}
+.tip-warning{background:#fff3e0;border-left:4px solid var(--org)}
+.tip-danger{background:#fce4ec;border-left:4px solid var(--red)}
+.tip-info{background:#e3f2fd;border-left:4px solid var(--accent)}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:#f1f4f9;padding:12px 14px;text-align:left;font-weight:600;color:var(--mut);border-bottom:2px solid var(--line)}
+.data-table td{padding:12px 14px;border-bottom:1px solid var(--line)}
+.data-table tr:hover td{background:#fafbfc}
+.data-table .highlight{background:#fff8e1}
+.matrix-table{width:100%;border-collapse:collapse;font-size:13px;margin:20px 0}
+.matrix-table th{background:var(--side1);color:#fff;padding:10px 12px;text-align:center;font-weight:600}
+.matrix-table td{padding:10px 12px;text-align:center;border:1px solid var(--line);font-size:12px}
+.matrix-table tr:nth-child(even) td{background:#fafbfc}
+.cell-high{background:#e8f5e9 !important;font-weight:700;color:#2e7d32}
+.cell-mid{background:#fff3e0 !important;color:#e65100}
+.cell-low{background:#fce4ec !important;color:#c62828}
+.cell-unknown{background:#f5f5f5 !important;color:#999}
+.flow-box{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px;background:#f1f4f9;border-radius:8px;margin:12px 0}
+.flow-step{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;white-space:nowrap;color:var(--txt)}
+.flow-arrow{color:var(--mut);font-size:16px}
+.summary-card{background:linear-gradient(135deg,#eef1ff,#e8f5e9);border-radius:12px;padding:22px 26px;border:1px solid #d0d8f0}
+
+/* ── 项目方案概览（A/B 共用） ── */
+details.acc{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:18px;box-shadow:var(--shadow);overflow:hidden}
+details.acc>summary{list-style:none;cursor:pointer;padding:15px 20px;display:flex;align-items:center;gap:12px;font-size:17px;font-weight:700;color:var(--txt)}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary .pn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:var(--accent-l);color:var(--accent-d);font-size:14px;font-weight:700;flex:0 0 30px}
+details.acc>summary .ar{margin-left:auto;color:var(--mut);transition:.2s;font-size:12px}
+details.acc[open]>summary .ar{transform:rotate(90deg)}
+.accbody{padding:2px 20px 22px}
+.blk{margin:16px 0}
+.blk h4{font-size:14.5px;font-weight:700;color:var(--accent);margin:4px 0 10px;display:flex;align-items:center;gap:8px}
+.blk h4 .bx{display:inline-block;width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;font-size:11px;text-align:center;line-height:20px;flex:0 0 20px}
+.subgrid{display:grid;gap:12px}
+.subgrid.g3{grid-template-columns:repeat(3,1fr)}
+.subgrid.g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:760px){.subgrid.g3,.subgrid.g2{grid-template-columns:1fr}}
+.subcard{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--card2)}
+.subcard .st{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.subcard .sd{font-size:12.5px;color:var(--mut);line-height:1.6}
+.subcard .sd b{color:var(--txt)}
+.kw{font-weight:800}
+.kwp{color:#d9480f}.kwm{color:#1971c2}.kwg{color:#2b8a3e}.kwb{color:#6741a8}.kwgold{color:var(--gold)}
+.fig{margin:10px 0 4px}
+.fig svg{width:100%;height:auto;display:block}
+.cap{font-size:11.5px;color:var(--mut2);text-align:center;margin:2px 0 14px}
+.zone{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:760px){.zone{grid-template-columns:1fr}}
+.zone .z{border-radius:12px;padding:16px;color:#3a3a3a}
+.zone .z .zt{font-weight:700;font-size:14px;margin-bottom:8px}
+.zone .z .zs{font-size:12px;background:rgba(255,255,255,.55);border-radius:8px;padding:6px 8px;margin-top:6px;line-height:1.5}
+.imgph{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:10px 0 4px}
+@media(max-width:760px){.imgph{grid-template-columns:1fr}}
+.thumb{cursor:pointer;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;transition:box-shadow .15s,transform .15s}
+.thumb:hover{box-shadow:0 4px 14px rgba(20,30,60,.14);transform:translateY(-2px)}
+.thumb img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.thumb .tcap{padding:8px 6px;font-size:12.5px;font-weight:600;color:var(--mut);text-align:center}
+.cap-center{text-align:center;color:var(--mut2)}
+/* 灯箱 overlay */
+.lb-overlay{position:fixed;inset:0;background:rgba(18,22,30,.88);display:none;align-items:center;justify-content:center;z-index:9999;padding:24px;cursor:zoom-out}
+.lb-overlay.open{display:flex}
+.lb-overlay img{max-width:92vw;max-height:88vh;border-radius:8px;box-shadow:0 12px 44px rgba(0,0,0,.45);cursor:default}
+.lb-close{position:fixed;top:16px;right:26px;color:#fff;font-size:30px;line-height:1;cursor:pointer;opacity:.82;font-weight:700}
+.lb-close:hover{opacity:1}
+.stage{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
+.stage>summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.stage>summary::-webkit-details-marker{display:none}
+.stage .sn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:13px;flex:0 0 30px}
+.stage .stt{font-weight:700;font-size:14.5px;color:var(--txt)}
+.stage .stg{font-size:12.5px;color:var(--mut);margin-left:6px}
+.stage .sar{margin-left:auto;color:var(--mut);transition:.2s}
+.stage[open] .sar{transform:rotate(90deg)}
+.stagebody{padding:4px 18px 18px}
+.lite{color:var(--mut);font-size:12.5px;line-height:1.7}
+.note2{font-size:12px;color:var(--mut);background:var(--card2);border-left:3px solid var(--line2);padding:8px 12px;border-radius:6px;margin-top:8px}
+.flow2{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:8px 0}
+.flow2 .nd{flex:1;min-width:120px;margin:4px;border-radius:10px;padding:12px 14px;font-size:13px;font-weight:600;text-align:center;color:#3a3a3a;box-shadow:var(--shadow)}
+.flow2 .ar{display:flex;align-items:center;color:var(--mut);font-size:18px;padding:0 2px}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">
+        <div class="mk" style="font-size:12px">LSG</div>
+        <div>
+          <h1>LSG Team</h1>
+          <div class="sub">老司机小队 · 休闲模拟经营</div>
+        </div>
+      </div>
+    </div>
+    <nav class="nav" id="nav">
+      <a class="active" data-s="home"><span class="ic">⌂</span>团队基础信息</a>
+      <a data-s="market"><span class="ic">◈</span>市场机会洞悉</a>
+      <a data-s="ppa"><span class="ic">▦</span>项目方案概览</a>
+      <a data-s="mvp"><span class="ic">◫</span>MVP 设计文档</a>
+      <a data-s="ai-dev"><span class="ic">⚙</span>AI 开发流程助力</a>
+      <a data-s="ai-drama"><span class="ic">▶</span>AI 短剧制作 SOP</a>
+    </nav>
+    <div class="foot">
+      模板样例 · 含占位内容〔待填〕<br>
+      敏感经营数据建议对外版做 NDA 分级
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HOME -->
+    <section class="sec show" id="home">
+      <div class="hero">
+        <h2>LSG（Leisure Simulation Games）Team · 老司机小队</h2>
+        <div class="tagline">一支用 AI 杠杆做休闲模拟经营+的独立小队</div>
+        <p>我们是一支 6~9 人的精干独立游戏小队，主攻「休闲模拟经营 +」品类，核心方向为<b>古风餐厅模拟经营 + 二合玩法</b>。</p>
+        <p>我们信奉自力更生的精益打法：<b>先验证、后规模；先社区、后产品</b>。</p>
+        <div class="statrow">
+          <div class="stat"><div class="n">6~9 人</div><div class="l">核心团队</div></div>
+          <div class="stat"><div class="n">古风餐厅+二合</div><div class="l">核心方向</div></div>
+          <div class="stat"><div class="n">上海</div><div class="l">驻地 Base</div></div>
+        </div>
+        <div class="hero-pills"><span class="pill">AI短剧 + 小游戏</span><span class="pill">IAA×IAP 混合</span><span class="pill">可换皮出海</span></div>
+      </div>
+
+      <div class="card">
+        <h3>团队综述</h3>
+        <p>团队长期专注于女性向休闲模拟经营品类，具备从 0–1 立项、核心循环设计、数值经济模型、H5 / 小游戏双平台（微信 / 抖音）上线运营到版号申报的完整闭环能力。</p>
+        <p>团队最近联合开发并长期运营的产品，为典型<b>女性向休闲模拟经营（花园世界 Like）</b>——在<b>微信 &amp; 抖音小游戏平台大区服</b>稳定运营，验证了"核心循环 + 强社交留存 + H5 / 小游戏双端适配"的工业化交付能力。</p>
+        <p>团队覆盖策划、数值、美术、前端等核心环节，辅以 AIGC 美术工作流与 AI 辅助研发工具链，可在精简人力下保持高产能与快速迭代节奏。</p>
+      </div>
+
+      <div class="card">
+        <h3>团队近期项目 <span class="tag tpl">脱敏表述</span></h3>
+        <p>团队主创长期共同供职于同一女性向休闲模拟经营项目（下称「该项目」，名称脱敏），覆盖产品、策划、数值、美术、前端全岗位，完整经历其从立项到双平台小游戏上线的全过程：</p>
+        <p>· <b>早期立项定位</b>：女性向换装模拟经验（原型《来我家玩吧》）；</p>
+        <p>· <b>2025.10 定位调整</b>：转向「花园世界 Like」女性向休闲模拟经营；</p>
+        <p>· <b>研发节奏</b>：用时 4 个月完成 3 日版本上线、7 个月完成 7 日付费验证测试；</p>
+        <p>· <b>平台突破</b>：作为公司首个以小游戏为主要平台的项目，独立打通微信 / 抖音小游戏平台的完整入驻、接入与上线运营工作。</p>
+      </div>
+
+      <div class="card">
+        <h3>团队 AI 能力</h3>
+        <p><b>研发工程侧</b>：核心成员具备 SDD（Spec-Driven Development，基于 Claude Code + OpenSpec）的实战经验，并对 TDD（测试驱动开发）亦有实践认知，可将"先规格、后实现、可验证"的工程方法导入小游戏的快速迭代，显著降低需求歧义与回归成本。</p>
+        <p><b>美术生产侧</b>：已建立基于主流 AIGC 模型（Gemini Banana、GPT-Image-2、Seedance 2 等）的美术工作流，覆盖角色原画概念生成 → 精修、动态宣发素材生产等环节，显著降低美术产能与外包成本。</p>
+      </div>
+
+      <h2 id="team-members" style="margin-top:34px;font-size:20px;">团队核心成员列表</h2>
+      <div class="lead">点击卡片展开查看完整履历（折叠态仅展示基础信息）　<span style="font-size:12px;color:var(--mut)">前 6 位为核心成员（姓名标注 ★）｜后 3 位为次核心成员</span></div>
+
+<!-- 一、Markel | 制作人 【核心呈现】 -->
+<details class="mem role-prod">
+        <summary><div class="ava">M</div><div style="flex:1"><div class="nm"><span class="n">Markel</span> <span class="star">★</span><span class="rl">制作人 / Producer</span></div><div class="bio">19 年游戏研发 &amp; 运营，横跨端游 / 页游 / 手游 / H5 小游戏全平台，深耕国风 / 女性向模拟经营赛道</div></div><div class="ar">▶</div></summary>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important"><div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 19 年全平台工业化经验 + 国风模拟经营赛道深度（3款相关产品）+ 版号申报落地能力</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 产品世界观、核心玩法框架、数值经济模型、整体进度统筹、版号申报与发行策略</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 19 年全平台工业化经验 + 国风模拟经营赛道深度（3款相关产品）+ 版号申报落地能力，可直接复用《厨神小当家/ 长安小时光》的餐饮经营设计资产</div>
+        </div>
+      </details>
+
+<!-- 二、WQ | 前端主程 【核心呈现】 -->
+<details class="mem role-dev">
+        <summary><div class="ava">W</div><div style="flex:1"><div class="nm"><span class="n">WQ</span> <span class="star">★</span><span class="rl">前端主程 / Lead Frontend</span></div><div class="bio">14 年 H5 / 小游戏前端开发，精通 Cocos / Egret / Laya 等主流引擎</div></div><div class="ar">▶</div></summary>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important"><div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 14 年 H5 小游戏一线主程、四平台（微信 / QQ /抖音 / 快手）适配经验</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· H5 / 小游戏客户端架构、跨平台适配、核心功能实现、技术团队管理</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 14 年 H5 小游戏一线主程、四平台适配经验，可大幅降低中小团队研发试错与跨端成本</div>
+        </div>
+      </details>
+
+<!-- 三、xx | 后端主程（人选待定）【核心呈现】 -->
+<details class="mem role-dev">
+        <summary><div class="ava">?</div><div style="flex:1"><div class="nm"><span class="n">xx</span> <span class="star">★</span><span class="rl">后端主程 / Lead Backend</span></div><div class="bio placeholder">人选待定 · 规划职责：服务端架构与选型、微信 / 抖音小游戏大区服数据同步与运营支撑、数值配置与 GM 工具后端实现、线上运维与性能保障</div></div><div class="ar">▶</div></summary>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important"><div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 服务端架构与选型、微信 / 抖音小游戏大区服数据同步与运营支撑、数值配置与 GM 工具后端实现、线上运维与性能保障</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 具备小游戏 / H5 高并发后端经验的资深工程师，可快速补位以闭环前后端研发能力</div>
+        </div>
+      </details>
+
+<!-- 四、ZQ | 2D主美 【核心呈现】 -->
+<details class="mem role-art">
+        <summary><div class="ava">Z</div><div style="flex:1"><div class="nm"><span class="n">ZQ</span> <span class="star">★</span><span class="rl">2D主美 / Lead Artist</span></div><div class="bio">10 年游戏美术，云南艺术学院绘画本科，精通二次元 / 欧美卡通 / 国风拟想多风格</div></div><div class="ar">▶</div></summary>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important"><div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 10 年实战美术 + 组长级团队 / 外包管理能力 +AIGC 工作流</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 古风美术设定、角色 / 场景原画、UI交互、宣发视觉、外包管理</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 组长级美术管控 + 多风格适应 + 外包管理 + AIGC工作流，可低成本打造高辨识度国风美术 IP</div>
+        </div>
+      </details>
+
+<!-- 五、Nova | 主策划 【核心呈现】 -->
+<details class="mem role-design">
+        <summary><div class="ava">N</div><div style="flex:1"><div class="nm"><span class="n">Nova</span> <span class="star">★</span><span class="rl">主策划 / Lead Designer</span></div><div class="bio">11 年手游设计，覆盖女性向模拟经营、社交养成卡牌、平台小游戏多赛道</div></div><div class="ar">▶</div></summary>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important"><div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 6 年深耕同一模拟经营产品、精通微信 /抖音小游戏上线运营、AI 工具链（OpenSpec /AI-Coding）将设计产能翻倍</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 餐厅经营 + 合成核心循环设计、模拟经营养成体系、商业化付费框架、小游戏双平台适配</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 6 年深耕同一模拟经营产品、精通微信 /抖音小游戏上线运营、AI 工具链（OpenSpec /AI-Coding）将设计产能翻倍，其核心循环玩法与本项目同构可直接迁移</div>
+        </div>
+      </details>
+
+<!-- 六、YYT | 交互策划 【核心呈现】 -->
+<details class="mem role-design">
+        <summary><div class="ava">Y</div><div style="flex:1"><div class="nm"><span class="n">YYT</span> <span class="star">★</span><span class="rl">交互策划 / Interaction Designer</span></div><div class="bio">14 年游戏策划，累计主导或参与近 20 款产品上线，其中 10+ 款日活破 10 万、6 款月流水超百万</div></div><div class="ar">▶</div></summary>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important"><div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 近 20 款小游戏上线实战 + 6 次月流水超百万硬数据+ AI 工作流使策划→程序落地效率倍增</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 核心交互玩法设计、UI 框架与资源标准化、AI策划工作流落地</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 近 20 款小游戏上线实战 + 6 次月流水超百万硬数据+ AI 工作流使策划→程序落地效率倍增，是团队小游戏数据验证经验最厚的一环</div>
+        </div>
+      </details>
+
+<!-- 七、DKW | 数值策划 【次核心成员】 -->
+<details class="mem role-design">
+        <summary><div class="ava">D</div><div style="flex:1"><div class="nm"><span class="n">DKW</span><span class="rl">数值策划 / Numerical Designer</span></div><div class="bio">13 年数值策划，从 0 到 1 主导千万流水项目，覆盖战斗 / 经济数值、商业化设计全链路</div></div><div class="ar">▶</div></summary>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important"><div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 13 年数值全栈 + 千万流水产品背书 + AI辅助数值工具链</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 核心经济数值、合成 / 养成数值模型、商业化付费与 AB测试调优</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 13 年数值全栈 + 千万流水产品背书 + AI辅助数值工具链，「模拟经营 + 收集」数值框架可直接复用于本项目</div>
+        </div>
+      </details>
+
+<!-- 八、xx | 2D动画（人选待定）【次核心成员】 -->
+<details class="mem role-art">
+        <summary><div class="ava">?</div><div style="flex:1"><div class="nm"><span class="n">xx</span><span class="rl">2D动画 / Animator</span></div><div class="bio placeholder">人选待定 · 规划职责：角色 / 场景动作动画、UI 动效、宣发短视频动画制作，配合主美建立动画生产规范</div></div><div class="ar">▶</div></summary>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important"><div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 角色 / 场景动作动画、UI 动效、宣发短视频动画制作，配合主美建立动画生产规范</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 具备休闲 / 女性向小游戏动画经验，并能融入 AIGC动画工作流（如 Seedance 2 等）的动画师</div>
+        </div>
+      </details>
+
+<!-- 九、White | 前端开发 【次核心成员】 -->
+<details class="mem role-dev">
+        <summary><div class="ava">W</div><div style="flex:1"><div class="nm"><span class="n">White</span><span class="rl">前端开发 / Frontend Dev</span></div><div class="bio">8 年+ Cocos Creator 客户端开发，精通 Cocos / Laya / Egret 多引擎，覆盖合成 / 女性向古风 / 卡牌多品类</div></div><div class="ar">▶</div></summary>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important"><div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 8 年+ Cocos 一线客户端开发 + 游卡核心班底 +合成玩法实操 + 古风女性向项目经验</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 客户端框架搭建、合成 / 经营核心玩法 UI交互实现、跨平台（微信 / 抖音）小游戏适配、性能优化</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· 游卡核心班底 + 8 年+ Cocos 一线客户端开发 +《合成与塔防》合成玩法实操 + 《花落长安》古风女性向项目经验，与本项目（古风餐厅 + 合成）赛道高度同构，可快速补强前端产能</div>
+        </div>
+      </details>
+
+    </section>
+
+    <!-- MARKET -->
+    <section class="sec" id="market">
+      <h2>市场机会洞悉</h2>
+      <div class="lead">基于「模拟经营 +」玩法组合类产品分析，优先聚焦国内微信 / 抖音两大小游戏主力平台，同时兼顾海外市场发展，探索团队的立项机会</div>
+
+      <!-- 平台格局 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:#e3f2fd;">🎮</div>
+          <div><div class="card-title">国内小游戏双平台格局：微信 + 抖音</div><div class="card-subtitle">休闲模拟经营的主战场</div></div>
+        </div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:4px;">
+            <div><div style="font-size:22px;font-weight:700;color:var(--accent)">¥610亿</div><div style="font-size:11.5px;color:var(--mut)">2025 大盘 +22%（DataEye，2026E 破700亿）</div></div>
+            <div><div style="font-size:22px;font-weight:700;color:var(--accent)">5.71亿</div><div style="font-size:11.5px;color:var(--mut)">微信小游戏 MAU（2025.8）</div></div>
+            <div><div style="font-size:22px;font-weight:700;color:var(--accent)">1.71亿</div><div style="font-size:11.5px;color:var(--mut)">抖音小游戏 MAU（+44%）</div></div>
+            <div><div style="font-size:22px;font-weight:700;color:var(--accent)">4.58亿</div><div style="font-size:11.5px;color:var(--mut)">模拟经营类用户规模</div></div>
+          </div>
+          <p style="margin-top:16px;">两个平台构成国内小游戏双引擎：<b>微信</b>依赖社交流量（好友裂变、群分享、视频号短剧联动），<b>抖音</b>依赖内容流量（短视频/直播挂载即点即玩，与短剧同源）。女性向用户涨幅约为男性向的 <b style="color:var(--gold)">2 倍</b>，国风/本土文化题材具备文化认同溢价——为本土化题材产品提供了差异化的用户基础。</p>
+        </div>
+      </div>
+
+      <!-- 海外小游戏机会 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:#e3f2fd;">🌍</div>
+          <div><div class="card-title">海外小游戏机会：TikTok Minis 出海增量</div><div class="card-subtitle">国内验证后的第二增长曲线</div></div>
+        </div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:4px;">
+            <div><div style="font-size:22px;font-weight:700;color:var(--accent)">$27.5亿</div><div style="font-size:11.5px;color:var(--mut)">2025 TikTok Minis 市场规模</div></div>
+            <div><div style="font-size:22px;font-weight:700;color:var(--accent)">$0.2–0.3</div><div style="font-size:11.5px;color:var(--mut)">海外获客成本（美元）</div></div>
+            <div><div style="font-size:22px;font-weight:700;color:var(--accent)">100%+</div><div style="font-size:11.5px;color:var(--mut)">头部产品首日 ROAS</div></div>
+            <div><div style="font-size:22px;font-weight:700;color:var(--accent)">18.4%</div><div style="font-size:11.5px;color:var(--mut)">2035 前 CAGR</div></div>
+          </div>
+          <p style="margin-top:16px;">TikTok Minis 已于 2026.1 全面公测（美/日/东南亚/巴西/中东等），增长机制是<b>"内容即入口、短视频挂载即点即玩"</b>——与「剧情化短剧获量 + 小游戏承接转化」<b>同一底层逻辑</b>，只是海外更早期、更不饱和。榜单头部被<b>模拟/经营类霸占</b>（TOP5 前四皆为模拟），正是二合经营内核的主场。</p>
+          <p class="mut" style="margin-top:8px;font-size:12px;">📌 命名口径：<b>TikTok Minis</b> 是平台小程序总生态品牌（含短剧 + 小游戏，即用户菜单入口名）；其中小游戏子频道官方名为 <b>TikTok Mini Games</b>（应用内聚合中心称 Mini Games Center）。</p>
+          <div class="tip-box tip-info" style="margin-top:12px;">💡 <b>换皮承接路径</b>：国内验证后，可将美术与叙事本地化（如中世纪 / 西式题材）、重拍对应语种短剧、接入 TikTok Minis SDK——<b>核心循环与内容引擎可高度复用</b>，边际成本极低。同一套内核即可覆盖海内外两片市场。</div>
+        </div>
+      </div>
+
+      <!-- 一、总览矩阵 -->
+      <div class="section">
+        <div class="section-title"><span class="emoji">📊</span> 一、模拟经营 × 玩法组合可行性总览矩阵</div>
+        <p style="font-size:13px;color:var(--mut);margin-bottom:16px;">横轴为模拟经营子类型，纵轴为可融合的特定玩法。颜色越绿 = 市场验证越充分、可行性越高。以下等级基于国内微信/抖音小游戏生态评估。</p>
+        <div style="overflow-x:auto;">
+        <table class="matrix-table">
+          <tbody><tr>
+            <th>玩法融合 ↓ / 模拟经营子类型 →</th>
+            <th>餐厅/烹饪经营</th><th>农场/田园经营</th><th>城市/领地建设</th><th>装修/庭院改造</th><th>宠物/养成经营</th><th>末日生存经营</th>
+          </tr>
+          <tr><td style="text-align:left;font-weight:700;">二合合成 Merge-2</td>
+            <td class="cell-high">S级<br>已验证</td><td class="cell-high">S级<br>已验证</td><td class="cell-mid">A级<br>部分验证</td><td class="cell-high">S级<br>已验证</td><td class="cell-mid">A级<br>部分验证</td><td class="cell-low">B级<br>待验证</td></tr>
+          <tr><td style="text-align:left;font-weight:700;">三消 Match-3</td>
+            <td class="cell-low">B级<br>竞争红海</td><td class="cell-mid">A级<br>成熟品类</td><td class="cell-low">B级<br>待验证</td><td class="cell-mid">A级<br>成熟品类</td><td class="cell-low">B级<br>待验证</td><td class="cell-low">C级</td></tr>
+          <tr><td style="text-align:left;font-weight:700;">放置挂机 Idle</td>
+            <td class="cell-mid">A级<br>部分验证</td><td class="cell-mid">A级<br>部分验证</td><td class="cell-low">B级</td><td class="cell-low">B级</td><td class="cell-mid">A级<br>部分验证</td><td class="cell-low">B级</td></tr>
+          <tr><td style="text-align:left;font-weight:700;">塔防+SLG</td>
+            <td class="cell-low">B级</td><td class="cell-low">C级</td><td class="cell-high">S级<br>已验证</td><td class="cell-low">C级</td><td class="cell-low">C级</td><td class="cell-high">S级<br>疯狂水世界</td></tr>
+          <tr><td style="text-align:left;font-weight:700;">找茬/寻物</td>
+            <td class="cell-mid">A级<br>海外验证</td><td class="cell-low">B级</td><td class="cell-low">B级</td><td class="cell-mid">A级<br>潜在机会</td><td class="cell-low">B级</td><td class="cell-low">C级</td></tr>
+          <tr><td style="text-align:left;font-weight:700;">排序收纳</td>
+            <td class="cell-low">B级</td><td class="cell-low">B级</td><td class="cell-low">B级</td><td class="cell-mid">A级<br>社交传播强</td><td class="cell-low">B级</td><td class="cell-low">C级</td></tr>
+          <tr><td style="text-align:left;font-weight:700;">卡牌收集/Gacha</td>
+            <td class="cell-mid">A级<br>部分验证</td><td class="cell-mid">A级</td><td class="cell-high">S级<br>这城有良田</td><td class="cell-mid">A级</td><td class="cell-mid">A级<br>部分验证</td><td class="cell-mid">A级<br>已验证</td></tr>
+          <tr><td style="text-align:left;font-weight:700;">解谜/剧情推理</td>
+            <td class="cell-mid">A级</td><td class="cell-low">B级</td><td class="cell-low">B级</td><td class="cell-mid">A级<br>Gossip式</td><td class="cell-low">B级</td><td class="cell-low">C级</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <!-- 二、核心组合 -->
+      <div class="section">
+        <div class="section-title"><span class="emoji">🎯</span> 二、核心组合 — 模拟经营 × 二合合成（市场验证最充分的融合方向）</div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#e8f5e9;">🍽️</div>
+            <div><div class="card-title">组合1：模拟经营 × 二合合成 × 餐厅/烹饪经营</div><div class="card-subtitle">⭐⭐⭐⭐⭐ 市场验证最充分</div></div>
+            <span class="feasibility-tag feasibility-s" style="margin-left:auto;">S级 可行性</span>
+          </div>
+          <div class="card-body">
+            <p><strong>海外标杆：</strong>Gossip Harbor（绯闻港口，柠檬微趣）| 月流水峰值 $6,300万（2025.11）| 2026 初登顶出海手游收入榜冠军 | 全球二合第一。</p>
+            <p><strong>国内对标：</strong>餐厅养成记（国风合成+餐厅经营，TapTap 7.9 分）| 肥鹅健身房（合成+Q版经营，2020初代/长期运营，2025H1国内收入约2,171万）→ 续作《肥鹅美食街》（2025末，二合+美食经营，更贴近本方向）| Flambé（柠檬微趣，烹饪+餐厅新作）。</p>
+            <p><strong>核心循环：</strong>合成食材 → 完成订单获取金币 → 修葺店铺 → 推动剧情 → 解锁更多合成元素。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:95%;background:var(--grn);"></div></div><span class="score-val">9.5</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:70%;background:var(--org);"></div></div><span class="score-val">7.0</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:75%;background:var(--red);"></div></div><span class="score-val">7.5</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:90%;background:var(--grn);"></div></div><span class="score-val">9.0</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:60%;background:var(--teal);"></div></div><span class="score-val">6.0</span></div>
+            <div class="tip-box tip-success" style="margin-top:16px;"><strong>✅ 可行性判断：高确定性。</strong>海外已被柠檬微趣充分验证，微信小游戏端有肥鹅健身房、续作《肥鹅美食街》（二合+美食经营）、餐厅养成记等先例。<br><strong>差异化空间：</strong>(1) 东方/本土美食题材竞争者相对少；(2) 剧情化叙事承接（章节式）；(3) 社交化改造：公会互助、好友餐厅互访。</div>
+            <div class="tip-box tip-warning"><strong>⚠️ 核心风险：</strong>(1) 柠檬微趣已三款同类形成矩阵，买量成本可能被抬高；(2) 合成链需深度经济系统支撑；(3) 微信端付费习惯与海外 App 差异大，需重设付费点。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#e8f5e9;">🏡</div>
+            <div><div class="card-title">组合2：模拟经营 × 二合合成 × 装修/庭院改造</div><div class="card-subtitle">⭐⭐⭐⭐⭐ 女性用户核心赛道</div></div>
+            <span class="feasibility-tag feasibility-s" style="margin-left:auto;">S级 可行性</span>
+          </div>
+          <div class="card-body">
+            <p><strong>国内对标：</strong>四季合合（国风庭院合成+装修）| 我的花园世界（2026 春节登顶微信小游戏畅销榜 TOP1，女性向花店模拟经营黑马）| Merge Mansion（庄园合合，腾讯代理国服）。</p>
+            <p><strong>核心循环：</strong>合成装饰材料/家具 → 解锁庭院区域 → 自由 DIY 装修 → 推进家族剧情 → 收集更多装饰元素。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:90%;background:var(--grn);"></div></div><span class="score-val">9.0</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:65%;background:var(--org);"></div></div><span class="score-val">6.5</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:60%;background:var(--org);"></div></div><span class="score-val">6.0</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:75%;background:var(--grn);"></div></div><span class="score-val">7.5</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:50%;background:var(--teal);"></div></div><span class="score-val">5.0</span></div>
+            <div class="tip-box tip-success" style="margin-top:16px;"><strong>✅ 可行性判断：高确定性，制作壁垒低于餐厅经营。</strong>装修 DIY 的视觉反馈和社交分享天然强，适合微信生态传播。<br><strong>差异化方向：</strong>(1) 特定文化主题庭院（如东方/中式园林）——四季合合已证该方向可行，但纯文化主题二合+装修在微信端仍为少数（多数合成经营为西式/现代题材）；(2) 市井经营+装修（如特定历史场景主题）；(3) 与知名 IP 联动提升买量效率。</div>
+            <div class="tip-box tip-warning"><strong>⚠️ 风险：</strong>若缺乏强剧情驱动，装修玩法易沦为"看图摆件"而缺付费动力。需借鉴 Gossip Harbor 的"剧情—合成—装修"三角循环。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#e3f2fd;">🌾</div>
+            <div><div class="card-title">组合3：模拟经营 × 二合合成 × 农场/田园经营</div><div class="card-subtitle">⭐⭐⭐⭐ 治愈系赛道</div></div>
+            <span class="feasibility-tag feasibility-a" style="margin-left:auto;">A+级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>国内对标：</strong>小森灵（合成+农场经营，TapTap 7.3）| 奶牛镇的小时光（社交田园经营）| Merge Dragons!（品类鼻祖）。</p>
+            <p><strong>核心循环：</strong>合成植物/动物/工具 → 解锁新田地区域 → 种植/养殖/加工 → 售卖农产品 → 装饰农场。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:80%;background:var(--grn);"></div></div><span class="score-val">8.0</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:60%;background:var(--org);"></div></div><span class="score-val">6.0</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:50%;background:var(--grn);"></div></div><span class="score-val">5.0</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:60%;background:var(--org);"></div></div><span class="score-val">6.0</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:40%;background:var(--teal);"></div></div><span class="score-val">4.0</span></div>
+            <div class="tip-box tip-warning"><strong>⚠️ 风险：</strong>农场节奏慢、付费点偏软，ARPU 天花板低于餐厅/城市经营，需深度合成网络制造"供求不平衡"驱动付费。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#fff3e0;">🐱</div>
+            <div><div class="card-title">组合4：模拟经营 × 二合合成 × 宠物/养成经营</div><div class="card-subtitle">⭐⭐⭐ 轻量化方向</div></div>
+            <span class="feasibility-tag feasibility-a" style="margin-left:auto;">A级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>国内对标：</strong>合成猫咪（超轻量纯合成+收集）| 肥鹅健身房（合成+健身房Q版经营，系列前作）→ 续作《肥鹅美食街》（二合+美食经营，2025末）。</p>
+            <p><strong>核心循环：</strong>合成同类宠物升级/解锁新物种 → 装饰宠物家园 → 收集图鉴 → 解锁宠物故事 → 社交分享萌宠。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:65%;background:var(--org);"></div></div><span class="score-val">6.5</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:40%;background:var(--grn);"></div></div><span class="score-val">4.0</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:55%;background:var(--org);"></div></div><span class="score-val">5.5</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:40%;background:var(--red);"></div></div><span class="score-val">4.0</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:30%;background:var(--teal);"></div></div><span class="score-val">3.0</span></div>
+            <div class="tip-box tip-info"><strong>💡 可行性判断：</strong>开发成本最低、适合快速试错，但 ARPU 天花板低，更依赖广告变现（IAA）。适合作为"副玩法"嵌入更大体量经营游戏。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 三、其他玩法 -->
+      <div class="section">
+        <div class="section-title"><span class="emoji">🎮</span> 三、模拟经营 × 其他超休闲玩法</div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#fce4ec;">💎</div>
+            <div><div class="card-title">组合5：模拟经营 × 三消 × 装修/花园</div><div class="card-subtitle">⭐⭐⭐ 经典但竞争白热化</div></div>
+            <span class="feasibility-tag feasibility-b" style="margin-left:auto;">B+级 · 竞争红海</span>
+          </div>
+          <div class="card-body">
+            <p><strong>标杆：</strong>梦幻花园 / 梦幻家园（Playrix，全球累计收入超 $50亿）。2025 Candy Crush 收入 $11亿，Royal Match $14亿。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:100%;background:var(--grn);"></div></div><span class="score-val">10</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:80%;background:var(--org);"></div></div><span class="score-val">8.0</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:95%;background:var(--red);"></div></div><span class="score-val">9.5</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:85%;background:var(--grn);"></div></div><span class="score-val">8.5</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:90%;background:var(--red);"></div></div><span class="score-val">9.0</span></div>
+            <div class="tip-box tip-danger"><strong>⚠️ 核心挑战：</strong>(1) 三消关卡设计是极度成熟工业流程，小团队难做差异化；(2) Playrix、King 买量成本极高；(3) 微信端换皮三消用户疲劳度高。</div>
+            <div class="tip-box tip-info"><strong>💡 唯一机会：</strong>放弃纯三消，将"消除"简化为轻度副玩法（类似 Gossip Harbor 的合成板已是广义消除）。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#fff3e0;">⏰</div>
+            <div><div class="card-title">组合6：模拟经营 × 放置挂机 × 收集养成</div><div class="card-subtitle">⭐⭐⭐ 低门槛高适配</div></div>
+            <span class="feasibility-tag feasibility-a" style="margin-left:auto;">A级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>核心循环：</strong>挂机自动生产资源 → 升级经营设施 → 解锁新品类/新区域 → 收集图鉴 → 循环提升效率。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:70%;background:var(--org);"></div></div><span class="score-val">7.0</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:35%;background:var(--grn);"></div></div><span class="score-val">3.5</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:60%;background:var(--org);"></div></div><span class="score-val">6.0</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:35%;background:var(--red);"></div></div><span class="score-val">3.5</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:25%;background:var(--teal);"></div></div><span class="score-val">2.5</span></div>
+            <div class="tip-box tip-success"><strong>✅ 可行性判断：</strong>开发成本极低、适合快速验证。但纯放置 ARPU 太低，建议作为模拟经营+合成的辅助离线收益系统，而非主玩法。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#f3e5f5;">🔍</div>
+            <div><div class="card-title">组合7：模拟经营 × 找茬/寻物 × 装修/剧情</div><div class="card-subtitle">⭐⭐⭐ 海外验证、国内蓝海</div></div>
+            <span class="feasibility-tag feasibility-a" style="margin-left:auto;">A-级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>海外标杆：</strong>June's Journey（寻物+剧情+装修，年收入超 $2亿）。<strong>国内机会：</strong>微信端几乎无"找茬+模拟经营"深度结合，中老年女性用户基数大，是明显蓝海；本土文化题材寻物（如历史画卷式大场景）差异化强。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:75%;background:var(--grn);"></div></div><span class="score-val">7.5</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:60%;background:var(--org);"></div></div><span class="score-val">6.0</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:30%;background:var(--grn);"></div></div><span class="score-val">3.0</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:65%;background:var(--org);"></div></div><span class="score-val">6.5</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:55%;background:var(--org);"></div></div><span class="score-val">5.5</span></div>
+            <div class="tip-box tip-warning"><strong>⚠️ 风险：</strong>寻物场景美术成本高于合成棋盘，内容产能压力大。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#fce4ec;">📦</div>
+            <div><div class="card-title">组合8：模拟经营 × 排序收纳 × 装修/家居</div><div class="card-subtitle">⭐⭐ 社交传播强但商业化未验证</div></div>
+            <span class="feasibility-tag feasibility-b" style="margin-left:auto;">B级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>趋势：</strong>排序收纳类（如"收纳达人"）近期在抖音/TikTok 靠"解压 ASMR"内容获极大传播。可作为模拟经营中的资源管理环节（整理杂乱物资解锁经营资源）。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:40%;background:var(--red);"></div></div><span class="score-val">4.0</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:30%;background:var(--grn);"></div></div><span class="score-val">3.0</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:20%;background:var(--grn);"></div></div><span class="score-val">2.0</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:25%;background:var(--red);"></div></div><span class="score-val">2.5</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:20%;background:var(--teal);"></div></div><span class="score-val">2.0</span></div>
+            <div class="tip-box tip-info"><strong>💡 建议：</strong>社交传播力极强，但纯收纳长期粘性与商业化未验证。建议作为"二合+装修"的子玩法（如"帮 NPC 整理仓库"），而非主玩法。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#e3f2fd;">🃏</div>
+            <div><div class="card-title">组合9：模拟经营 × 卡牌收集/Gacha × 城市建设</div><div class="card-subtitle">⭐⭐⭐⭐ 已验证付费模型</div></div>
+            <span class="feasibility-tag feasibility-a" style="margin-left:auto;">A级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>国内标杆：</strong>这城有良田（古风城市经营+卡牌养成，微信畅销榜 Top30）| 商业都市 | 疯狂水世界（模拟经营+英雄卡牌+SLG）。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:85%;background:var(--grn);"></div></div><span class="score-val">8.5</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:65%;background:var(--org);"></div></div><span class="score-val">6.5</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:65%;background:var(--org);"></div></div><span class="score-val">6.5</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:90%;background:var(--grn);"></div></div><span class="score-val">9.0</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:70%;background:var(--org);"></div></div><span class="score-val">7.0</span></div>
+            <div class="tip-box tip-success"><strong>✅ 可行性判断：</strong>卡牌 Gacha 是国内最成熟付费模型，与模拟经营效率提升天然契合；但这城有良田已占古风经营+卡牌赛道，需题材差异化（如现代都市/科技创业，或将卡牌改为"合作伙伴"降低氪金感）。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#f3e5f5;">🔮</div>
+            <div><div class="card-title">组合10：模拟经营 × 解谜/剧情推理 × 装修/餐厅</div><div class="card-subtitle">⭐⭐⭐ 内容驱动型 · 值得探索</div></div>
+            <span class="feasibility-tag feasibility-a" style="margin-left:auto;">A-级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>标杆：</strong>Gossip Harbor 本身就是"合成+经营+悬疑剧情"经典案例；Merge Mansion 以"奶奶隐瞒了什么"为剧情驱动。柠檬微趣已把"狗血剧情"作为二合经营核心差异化武器。</p>
+            <div class="score-row"><span class="score-label">市场验证</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:80%;background:var(--grn);"></div></div><span class="score-val">8.0</span></div>
+            <div class="score-row"><span class="score-label">开发难度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:55%;background:var(--org);"></div></div><span class="score-val">5.5</span></div>
+            <div class="score-row"><span class="score-label">竞争烈度</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:50%;background:var(--org);"></div></div><span class="score-val">5.0</span></div>
+            <div class="score-row"><span class="score-label">ARPU潜力</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:70%;background:var(--grn);"></div></div><span class="score-val">7.0</span></div>
+            <div class="score-row"><span class="score-label">制作壁垒</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:45%;background:var(--teal);"></div></div><span class="score-val">4.5</span></div>
+            <div class="tip-box tip-success"><strong>✅ 可行性判断：</strong>剧情是留存核心驱动力而非独立玩法。最佳策略是将强剧情作为任何模拟经营组合的"情感引擎"——微信生态章节式叙事 + 视频号短剧天然联动。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 四、进阶混合组合 -->
+      <div class="section">
+        <div class="section-title"><span class="emoji">⚡</span> 四、进阶：双工艺 / 多玩法混合组合</div>
+        <p style="font-size:13px;color:var(--mut);margin-bottom:16px;">市场趋势显示，单一"模拟经营 + X"已不够，头部产品普遍采用"前期钩子 + 中期留存 + 后期付费"的多层结构。以下混合组合供战略储备参考，单一玩法验证成熟后再拓展。</p>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#e8f5e9;">🌊</div>
+            <div><div class="card-title">组合11：模拟经营 → 卡牌RPG → 休闲SLG（疯狂水世界模式）</div><div class="card-subtitle">休闲 SLG 2.0 · 已验证</div></div>
+            <span class="feasibility-tag feasibility-s" style="margin-left:auto;">S级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>标杆：</strong>疯狂水世界（益世界，微信畅销榜 Top10）| 无尽冬日 | 三国冰河时代。</p>
+            <div class="flow-box">
+              <span class="flow-step" style="background:#e8f5e9;">初期：模拟经营<br>采集·建造·加工</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-step" style="background:#e3f2fd;">中期：卡牌RPG<br>英雄养成·推关</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-step" style="background:#fff3e0;">后期：休闲SLG<br>联盟GvG·赛季</span>
+            </div>
+            <div class="tip-box tip-success"><strong>✅ 可行性判断：</strong>已被疯狂水世界充分验证。但 SLG 后端社交生态运营成本高，需专业运营团队；"模拟经营→SLG"转化漏斗需精细设计，不适合纯休闲小团队直接尝试。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#e3f2fd;">🏗️</div>
+            <div><div class="card-title">组合12：模拟经营 × 二合合成 × 卡牌养成（三核混合）</div><div class="card-subtitle">创新组合 · 高潜力需验证</div></div>
+            <span class="feasibility-tag feasibility-b" style="margin-left:auto;">B+级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>设计思路：</strong>二合合成"物品产出"与卡牌养成"角色效率提升"形成双向循环——合成材料产出抽卡券，卡牌角色提升合成效率/解锁新合成链。</p>
+            <div class="tip-box tip-warning"><strong>⚠️ 风险：</strong>(1) 三玩法融合复杂度或致新手引导过长；(2) 需同时精通合成经济与卡牌数值人才；(3) 缺乏直接对标，市场验证成本高。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#fff3e0;">🏛️</div>
+            <div><div class="card-title">组合13：模拟经营 × 卡牌养成 × 轻度SLG（这城有良田模式）</div><div class="card-subtitle">古风城市经营方向 · 已验证</div></div>
+            <span class="feasibility-tag feasibility-a" style="margin-left:auto;">A级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>标杆：</strong>这城有良田（古风城市经营→卡牌→轻度SLG，微信畅销榜 Top30）| 我是大东家。</p>
+            <div class="tip-box tip-info"><strong>💡 可行性判断：</strong>已被充分验证，但古风赛道地位稳固。差异化：(1) 换题材（现代都市/海洋文明）；(2) 加二合合成——"招募官吏"抽卡替换为"合成材料解锁角色"；(3) 做更轻量版（纯经营+卡牌，不做 SLG）。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#f3e5f5;">🎨</div>
+            <div><div class="card-title">组合14：模拟经营 × 二合合成 × 找茬/寻物（双休闲融合）</div><div class="card-subtitle">蓝海创新 · 微信生态潜力大</div></div>
+            <span class="feasibility-tag feasibility-b" style="margin-left:auto;">B+级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>设计思路：</strong>在经营场景中将"找茬/寻物"作为获取特殊合成材料途径——如餐厅寻隐藏食材、庭院寻遗失装饰品，找到的物品进入合成棋盘。</p>
+            <div class="tip-box tip-success"><strong>✅ 机会判断：</strong>(1) 寻物"发现感"是合成无法替代的情绪价值；(2) 精美寻物场景短视频买量 CTR 天然高；(3) 微信端几乎无此组合，先发优势明显。<strong>风险：</strong>两玩法均需大量美术，产能要求高。</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#e8f5e9;">🍳</div>
+            <div><div class="card-title">组合15：模拟经营 × 二合合成 × 烹饪时间管理</div><div class="card-subtitle">Flambé 模式 · 已验证但竞品增加</div></div>
+            <span class="feasibility-tag feasibility-a" style="margin-left:auto;">A-级</span>
+          </div>
+          <div class="card-body">
+            <p><strong>标杆：</strong>Flambé: Merge and Cook（柠檬微趣 2025 新作，二合+烹饪+餐厅）| 餐厅养成记（国风二合+中式烹饪）。</p>
+            <div class="tip-box tip-warning"><strong>⚠️ 判断：</strong>柠檬微趣已将 Flambé 作为第三款二合产品，细分方向已被头部盯上。小团队进入需差异化——本土化烹饪题材或是突破口。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 五、综合排名 -->
+      <div class="section">
+        <div class="section-title"><span class="emoji">🏆</span> 五、组合可行性综合排名</div>
+        <p style="font-size:13px;color:var(--mut);margin-bottom:16px;">基于市场验证、竞争烈度、ARPU 潜力、开发难度等五维度的综合评估（S＞A+＞A＞A-＞B+＞B＞C）。</p>
+        <div style="overflow-x:auto;">
+        <table class="data-table">
+          <tbody><tr><th>排名</th><th>组合</th><th>可行性</th><th>市场验证</th><th>竞争烈度</th><th>ARPU潜力</th><th>开发难度</th><th>综合推荐</th></tr>
+          <tr class="highlight"><td><strong>#1</strong></td><td>二合合成 × 餐厅/烹饪经营 × 剧情</td><td><span class="badge badge-s">S</span></td><td>★★★★★</td><td>中高</td><td>★★★★★</td><td>中高</td><td><strong>⭐⭐⭐⭐⭐</strong></td></tr>
+          <tr class="highlight"><td><strong>#2</strong></td><td>二合合成 × 装修/庭院改造 × 剧情</td><td><span class="badge badge-s">S</span></td><td>★★★★★</td><td>中</td><td>★★★★☆</td><td>中</td><td><strong>⭐⭐⭐⭐⭐</strong></td></tr>
+          <tr><td><strong>#3</strong></td><td>模拟经营 → 卡牌RPG → 休闲SLG（疯狂水世界）</td><td><span class="badge badge-s">S</span></td><td>★★★★★</td><td>中高</td><td>★★★★★</td><td>高</td><td><strong>⭐⭐⭐⭐</strong></td></tr>
+          <tr class="highlight"><td><strong>#4</strong></td><td>二合合成 × 农场/田园经营</td><td><span class="badge badge-a">A+</span></td><td>★★★★☆</td><td>低</td><td>★★★☆☆</td><td>中低</td><td><strong>⭐⭐⭐⭐</strong></td></tr>
+          <tr><td><strong>#5</strong></td><td>卡牌收集 × 城市建设经营（这城有良田）</td><td><span class="badge badge-a">A</span></td><td>★★★★☆</td><td>中</td><td>★★★★★</td><td>中高</td><td><strong>⭐⭐⭐⭐</strong></td></tr>
+          <tr><td><strong>#6</strong></td><td>找茬/寻物 × 装修经营 × 剧情</td><td><span class="badge badge-a">A-</span></td><td>★★★★☆</td><td>低</td><td>★★★☆☆</td><td>中</td><td><strong>⭐⭐⭐☆</strong></td></tr>
+          <tr><td><strong>#7</strong></td><td>二合合成 × 宠物养成经营</td><td><span class="badge badge-a">A</span></td><td>★★★☆☆</td><td>中</td><td>★★☆☆☆</td><td>低</td><td><strong>⭐⭐⭐</strong></td></tr>
+          <tr><td><strong>#8</strong></td><td>二合合成 × 烹饪时间管理</td><td><span class="badge badge-a">A-</span></td><td>★★★★☆</td><td>中</td><td>★★★☆☆</td><td>中</td><td><strong>⭐⭐⭐</strong></td></tr>
+          <tr><td><strong>#9</strong></td><td>放置挂机 × 收集养成经营</td><td><span class="badge badge-a">A</span></td><td>★★★☆☆</td><td>中</td><td>★★☆☆☆</td><td>低</td><td><strong>⭐⭐⭐</strong></td></tr>
+          <tr><td><strong>#10</strong></td><td>二合合成 × 卡牌养成（三核混合）</td><td><span class="badge badge-b">B+</span></td><td>★★☆☆☆</td><td>低</td><td>★★★★☆</td><td>高</td><td><strong>⭐⭐☆</strong></td></tr>
+          <tr><td><strong>#11</strong></td><td>二合合成 × 寻物（双休闲融合）</td><td><span class="badge badge-b">B+</span></td><td>★☆☆☆☆</td><td>极低</td><td>★★★☆☆</td><td>中高</td><td><strong>⭐⭐☆</strong></td></tr>
+          <tr><td><strong>#12</strong></td><td>排序收纳 × 装修/家居经营</td><td><span class="badge badge-b">B</span></td><td>★★☆☆☆</td><td>极低</td><td>★☆☆☆☆</td><td>低</td><td><strong>⭐⭐</strong></td></tr>
+          <tr><td><strong>#13</strong></td><td>三消 × 花园/餐厅经营</td><td><span class="badge badge-b">B+</span></td><td>★★★★★</td><td>极高</td><td>★★★★☆</td><td>极高</td><td><strong>⭐☆</strong></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <!-- 六、双平台专项 -->
+      <div class="section">
+        <div class="section-title"><span class="emoji">📱</span> 六、微信 vs 抖音：双平台获客逻辑差异</div>
+        <p style="font-size:13px;color:var(--mut);margin-bottom:16px;">两个平台构成国内小游戏双引擎，流量来源与适配玩法不同，但都可用剧情化短剧内容做零成本自然量，对双平台通用。</p>
+        <div style="overflow-x:auto;">
+        <table class="data-table">
+          <tbody><tr><th>维度</th><th>微信小游戏</th><th>抖音小游戏</th></tr>
+          <tr><td><b>流量来源</b></td><td>社交关系链（好友/群/朋友圈）、公众号、视频号</td><td>短视频/直播内容流量、达人挂载、挑战赛</td></tr>
+          <tr><td><b>核心优势</b></td><td>裂变强、审核快、用户付费习惯较好</td><td>内容即入口、短剧/玩法视频零成本引流、算法分发潜力大</td></tr>
+          <tr class="highlight"><td><b>短剧联动</b></td><td>视频号短剧与游戏天然联动，剧情章节式承接</td><td>短剧/玩法视频挂载即点即玩，与游戏同源流量</td></tr>
+          <tr><td><b>适配玩法</b></td><td>强剧情/社交（公会互助、好友互访、菜品比拼）</td><td>视觉冲击强、解压/ASMR、短剧化剧情</td></tr>
+          <tr><td><b>代表产品</b></td><td>这城有良田、餐厅养成记、四季合合</td><td>抓大鹅（抖音月活超千万）、大量合成/解压类内容爆款（抖音原生）</td></tr>
+          </tbody></table>
+        </div>
+        <div class="tip-box tip-info" style="margin-top:16px;">💡 <b>开发者建议</b>：可先用剧情短剧在<b>双平台</b>养自然量（不买量），验证次留后再针对性放大；同一套核心循环在不同平台 / 题材间换皮，边际成本极低。</div>
+      </div>
+
+      <!-- 七、深度洞察 -->
+      <div class="section">
+        <div class="section-title"><span class="emoji">💡</span> 七、深度洞察与行业趋势</div>
+        <div class="summary-card" style="background:linear-gradient(135deg,#eef1ff 0%,#e8f5e9 100%);border-radius:12px;padding:24px 28px;border:1px solid #d0d8f0;">
+          <h3 style="font-size:16px;margin-bottom:16px;">模拟经营 + 二合合成的市场机会</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+            <div><h4 style="font-size:14px;color:var(--accent);">1. 品类势能</h4><p style="font-size:13px;">合成游戏 2025 年全球市场增速 27%，中国厂商占据二合品类近 80% 份额。Gossip Harbor 月流水峰值 $6,300万（2025.11）、2026 初登顶出海手游收入榜冠军，证明天花板远未被触及。</p></div>
+            <div><h4 style="font-size:14px;color:var(--accent);">2. 用户重合度</h4><p style="font-size:13px;">二合游戏用户与传统三消、模拟经营用户高度重合，但合成玩法在休闲程度、挫败感控制、内容产能压力上更具优势。79% 玩家为 30 岁以上女性。</p></div>
+            <div><h4 style="font-size:14px;color:var(--accent);">3. 微信生态适配</h4><p style="font-size:13px;">二合棋盘 + 经营界面天然适配竖屏手机，15 分钟碎片化 session 完美匹配微信小游戏场景。章节式叙事适配"即开即玩、即走即停"。</p></div>
+            <div><h4 style="font-size:14px;color:var(--accent);">4. 商业化成熟度</h4><p style="font-size:13px;">混合变现（IAP+IAA）已被头部产品充分验证。Gossip Harbor 广告收入占总收入 15–20%，看广告用户付费意愿提升 4.5 倍。</p></div>
+          </div>
+        </div>
+        <div class="tip-box tip-info" style="margin-top:24px;">📌 <b>方向研判</b>：综合上述分析，模拟经营 + 二合合成（尤其餐厅 / 装修 / 农场方向）是当前验证最充分、确定性最高的融合路线；剧情化与社交化是普适的留存增强手段。需谨慎的方向包括：纯三消（竞争红海 + 制作壁垒极高）、纯放置（ARPU 过低）、模拟经营 + 重度 SLG（运营成本不适合小团队）、以及无剧情驱动的纯经营（缺乏留存锚点）。具体立项选择见第八节。</div>
+      </div>
+
+      <!-- 八、立项机会 -->
+      <div class="section">
+        <div class="section-title"><span class="emoji">🚀</span> 八、立项机会汇总（对齐本团队方向）</div>
+        <p style="font-size:13px;color:var(--mut);margin-bottom:16px;">先聚焦<b>国内市场环境</b>下的确定性机会，再以<b>出海空间</b>作为验证后的增量延展。</p>
+
+        <h3 style="margin:6px 0 10px;font-size:14px;color:var(--accent);">A. 国内市场机会（主战场）</h3>
+        <div class="opp"><div class="t">① 古风/国风 + 二合合成（S级 · 首推）</div><div class="d">国风餐厅/庭院 + 合成是确定性最高的方向。海外 Gossip Harbor 月流水 $6,300万 已被验证，<b>二合+经营本身是成熟且拥挤的赛道</b>（微信端已有餐厅养成记、四季合合、小森灵、这城有良田等多款）；但「国风/古风题材 + 女性向 + 短剧剧游联动」这个<b>完整包装组合</b>在微信端相对稀缺——多数二合经营为西式/现代题材。差异化切口在此，而非赛道空白。</div></div>
+        <div class="opp"><div class="t">② 女性向情感叙事 + 剧情短剧联动</div><div class="d">「短剧即入口、即点即玩」把内容获客成本压到极低。微信视频号 / 抖音短剧 与游戏天然承接，观众想"继续体验"即导入游戏。</div></div>
+        <div class="opp"><div class="t">③ 小游戏先行 → 独立 APP 承接</div><div class="d">验证后导独立 APP 做 IAP 深化，把小游戏的高频轻量流量沉淀为高价值用户，延长 LTV。</div></div>
+        <div class="opp"><div class="t">④ IAA×IAP 混合 + 内容获客对冲买量</div><div class="d">自然/免费占比决定回本周期而非生死——用 AI 短剧主动撬动自然量，是对冲买量风险的免费杠杆，也是 unit economics 的承重墙。</div></div>
+
+        <h3 style="margin:18px 0 10px;font-size:14px;color:var(--accent);">B. 出海空间机会（验证后延展）</h3>
+        <div class="opp"><div class="t">⑤ TikTok Minis 出海换皮（中世纪题材）</div><div class="d">TikTok Minis 2026.1 全面公测，模拟/经营类霸榜头部，获客可低至 0.2–0.3 美元、首日 ROAS 破 100%。国内验证后，换中世纪美术 + 重拍西/英语短剧 + 接 TikTok Minis SDK，核心循环与内容引擎零改动，复用成本极低。</div></div>
+        <div class="opp"><div class="t">⑥ 海外"二合 + 剧情"成熟市场增量</div><div class="d">Gossip Harbor / Merge Mansion 已教育海外用户，但国风/东方题材在海外仍稀缺。以差异化美术与叙事切入，避开柠檬微趣的"狗血西式剧情"红海。</div></div>
+
+        <div class="card">
+          <h3>标杆佐证（去品牌化）</h3>
+          <p class="mut">现象级「古风花店模拟经营」小游戏「我的花园世界」（2025.8 公测）——女性向古风包装、小游戏先行导 APP，以"大女主逆袭"剧情化叙事（文本剧情钩子，驱动留存与买量）击穿女性向赛道。上线 8 个月全球流水破 8,000 万美元、2026 春节双端（微信 + 抖音小游戏）登顶畅销榜 TOP1、小程序端流水达亿级。其与本方向（古风 + 女性向 + 模拟经营 + 剧情化叙事 + 小游戏先行）高度同构，是赛道可行性的强证据。</p>
+        </div>
+        <div class="tip-box tip-success">✅ <b>结论</b>：以国内微信/抖音双平台为<b>主战场</b>，锁定「模拟经营 + 二合合成 + 国风/东方主题 + 强剧情/短剧化」；验证成立后用<b>同内核换皮</b>打开 TikTok Minis 出海增量。本团队项目即走此路径。</div>
+      </div>
+    </section>
+
+    <!-- PROJECT PLAN -->
+        <section class="sec" id="ppa">
+      <h2>项目方案概览</h2>
+      <div class="lead">根据「模拟经营 +」立项机会分析，结合团队经验和优势，制定目标项目的基本方案说明，兼具 商业计划书 和 项目计划书 的核心内容。</div>
+
+      <!-- CSS scoped to ppa for larger fonts + fig centering -->
+      <style>
+        #ppa{font-size:15px}
+        #ppa .acc>summary{font-size:18px}
+        #ppa .blk h4{font-size:16px}
+        #ppa .subcard .st{font-size:14px}
+        #ppa .subcard .sd{font-size:13px;line-height:1.7}
+        #ppa .lite{font-size:13px;line-height:1.75}
+        #ppa .data-table{font-size:14px}
+        #ppa .data-table th{padding:13px 15px;font-size:13.5px}
+        #ppa .data-table td{padding:12px 15px;font-size:13.5px}
+        #ppa .matrix-table{font-size:13.5px}
+        #ppa .matrix-table th{padding:11px 13px;font-size:13px}
+        #ppa .matrix-table td{padding:10px 13px;font-size:12.5px}
+        #ppa .cap{font-size:12.5px}
+        #ppa .note{font-size:13px}
+        #ppa .note2{font-size:13px;padding:10px 14px}
+        #ppa .warn{font-size:13px;padding:13px 18px}
+        #ppa .zone .zt{font-size:15px}
+        #ppa .zone .zs{font-size:13px}
+        #ppa .stage .stt{font-size:15.5px}
+        #ppa .stage .stg{font-size:13px}
+        #ppa .stagebody .lite{font-size:13.5px}
+        #ppa .fig{text-align:center;max-width:720px;margin-left:auto;margin-right:auto}
+        #ppa .fig svg{max-width:100%;height:auto}
+        /* validation indicator names bold+large */
+        #pa5-metrics td:nth-child(2){font-weight:700;font-size:14px;color:#1a1a2e}
+        /* stage table stage names bold+large */
+        #pa6-table td:nth-child(2){font-weight:700;font-size:14.5px;color:#1a1a2e}
+      </style>
+
+      <!-- 1 执行摘要 -->
+      <details class="acc" open>
+        <summary><span class="pn">1</span>执行摘要<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="blk">
+            <h4><span class="bx">1.1</span>一句话定位</h4>
+            <div class="subcard" style="border-left:4px solid var(--gold)">
+              <p style="font-size:16px;line-height:1.95">
+                <span class="kw kwgold">古风餐厅</span>「<span class="kw kwp">合成 + 经营</span>」轻量循环小游戏：靠<span class="kw kwb">剧情向 AI 短剧</span>零成本养自有古风受众，<span class="kw kwm">IAA×IAP 混合</span>变现，验证留存与 unit economics 后导流<span class="kw kwg">独立 APP</span>做长线 IAP。
+              </p>
+            </div>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">1.2</span>核心逻辑 · 为什么现在能做</h4>
+            <div class="subgrid g3">
+              <div class="subcard"><div class="st">📈 赛道红利</div><div class="sd">2025 国内小游戏约 <b>610 亿</b>（+22%），2026 破 <b>700 亿</b>；微信 DAU 破 1 亿、抖音月活 <b>1.71 亿</b>。行业转入<b>存量精细化</b>——内容+留存成破局核心。</div></div>
+              <div class="subcard"><div class="st">🎯 品类机会</div><div class="sd">模拟经营 2023 破 <b>100 亿</b>；2025 用户 <b>4.58 亿</b>、付费渗透 <b>27.7%</b>。古风 / 女性向是溢价最高细分。</div></div>
+              <div class="subcard"><div class="st">✅ 模式验证样本</div><div class="sd">现象级古风花店小游戏（厦门麟贝，2025.8）8 个月全球流水破 <b>8,000 万美元</b>，2026 春节双端登顶。与本案高度同构，是最大外部可信度支撑。</div></div>
+            </div>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">1.3</span>财务内核（摘要）</h4>
+            <div class="subgrid g3">
+              <div class="subcard"><div class="st">🎯 LTV 目标</div><div class="sd">单注册 120 日 LTV <b>￥4.0</b>（回本线）/ 理想 <b>￥4.5–5.0</b>。</div></div>
+              <div class="subcard"><div class="st">🚧 买量硬门槛</div><div class="sd">注册成本 <b>≤￥5</b>；<b>自然 / 免费占比</b>决定回本周期（≥20% → 120 日）。</div></div>
+              <div class="subcard"><div class="st">🌱 早期不买量</div><div class="sd">靠 AI 短剧自然量跑通模型，规避 4 个月现金垫资风险。</div></div>
+            </div>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">1.4</span>团队配置 · 两套可选方案</h4>
+            <div class="subgrid g2">
+              <div class="subcard" style="border-top:3px solid var(--teal)">
+                <div class="st">🛡 稳健推进型（6 人）· 默认推荐</div>
+                <div class="sd" style="margin-top:8px">
+                  <b>岗位配置：</b>制作人 ×1 · 主策划 ×1 · 交互策划 ×1<br>
+                  　　　　　　前端主程 ×1 · 后端主程 ×1 · 2D主美 ×1
+                </div>
+                <div class="sd" style="margin-top:6px">现金流紧、偏好更长验证窗口、bootstrapping 优先时采用。默认推荐。</div>
+              </div>
+              <div class="subcard" style="border-top:3px solid var(--gold)">
+                <div class="st">🚀 快速推进型（9 人）· 抢窗口升级</div>
+                <div class="sd" style="margin-top:8px">
+                  <b>岗位配置：</b>制作人 ×1 · 主策划 ×1 · 交互策划 ×1 · 数值策划 ×1<br>
+                  　　　　　　前端主程 ×1 · 后端主程 ×1 · 前端开发 ×1<br>
+                  　　　　　　2D主美 ×1 · 2D动画 ×1
+                </div>
+                <div class="sd" style="margin-top:6px">方向明确、需抢时间窗口、自有现金可支撑更高 burn 时采用。升级选项。</div>
+              </div>
+            </div>
+            <div class="note2">① 两方案为<b>立项时二选一</b>的配置选项（非先后两个阶段）；默认推荐稳健 6 人，9 人作为需抢窗口时的升级项。不预支规模——没验证不招人、不买量。<br>② 团队规模、分工与履历详见本页 <a class="doclink" data-jump="home" data-anchor="team-members">团队核心成员列表</a>。</div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 2 市场分析 -->
+      <details class="acc">
+        <summary><span class="pn">2</span>市场分析<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="blk">
+            <h4><span class="bx">2.1</span>国内市场大盘</h4>
+            <table class="data-table">
+              <tr><th>指标</th><th>数据</th><th>含义</th></tr>
+              <tr><td>国内小游戏市场规模（2025）</td><td>约 610 亿，+22%</td><td>仍高增长，增速从 64% 回落，进入存量期</td></tr>
+              <tr><td>2026 预测规模</td><td>突破 700 亿</td><td>赛道未触顶</td></tr>
+              <tr><td>微信小游戏 MAU / DAU</td><td>5.71 亿 / 破 1 亿</td><td>最大分发场域</td></tr>
+              <tr><td>抖音小游戏月活</td><td>约 1.71 亿（半年 +44%）</td><td>与短剧同源流量，联动顺</td></tr>
+              <tr><td>百万 DAU 产品数（微信）</td><td>70 款</td><td>头部稀缺，中腰部有机会</td></tr>
+              <tr><td>单季流水超千万产品</td><td>300 款</td><td>中小团队可触达的收入量级</td></tr>
+              <tr><td>开发者规模</td><td>超 40 万，80% 中小团队</td><td>本团队属主流"中小团队"画像，非劣势</td></tr>
+              <tr><td>女性向游戏涨幅</td><td>为男性向的 <b>2 倍</b></td><td>古风女性向是溢价赛道</td></tr>
+            </table>
+            <p class="lite"><b>目标用户：</b>古风 / 国风受众、女性向 / 治愈向轻游戏玩家、短剧观众。碎片化高频（人均单日启动 5.1 次、时长 24.6 分）、一二线 + 年轻女性占比高，为"审美 + 情绪 + 剧情"付费意愿稳。痛点：市场"有剧情、有经营、轻量可玩"产品稀缺；短剧观众看完剧想延续体验却无承接——本产品即承接。</p>
+            <p class="lite"><b>差异化：</b>以独立原创古风餐厅 IP「望月食坊」（已定）为壳，IP 权属干净、美术可控、情绪差异化明确；对标已验证标杆，新增"合成机制"（强化留存正反馈）与"AI 短剧工业化产能"（叙事钩子升级为可规模内容引擎、压低获客成本），形成差异化壁垒。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">2.2</span>海外市场机会（TikTok Minis）</h4>
+            <div class="subgrid g2">
+              <div class="subcard"><div class="st">🌐 生态构成</div><div class="sd">TikTok Minis 为平台小程序总品牌（含短剧 + 小游戏），小游戏子频道官方名 <b>TikTok Mini Games（Mini Games Center）</b>；2026.1 全面公测，已开放美 / 日 / 东南亚 / 巴西 / 中东等。</div></div>
+              <div class="subcard"><div class="st">💰 市场规模</div><div class="sd">2025 约 <b>27.5 亿美元</b>（WiseGuy），2035 达 150 亿、CAGR 18.4%。单用户获客可低至 <b>0.2–0.3 美元</b>、头部首日 ROAS 破 100%（当天投放当天回本）。</div></div>
+              <div class="subcard"><div class="st">🎮 品类契合</div><div class="sd">TikTok Mini Games 榜单头部由模拟 / 经营类霸占（TOP5 前四均为模拟），与"合成 + 餐厅经营"内核高度同构；机制即"内容即入口、短视频挂载即点即玩"。</div></div>
+              <div class="subcard"><div class="st">♟ 战略意义</div><div class="sd">资方 / 发行资源侧重不同，本案以<b>同内核换皮</b>匹配不同资源方，不重建核心，是资本高效的 hedging。</div></div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 3 产品方案 -->
+      <details class="acc">
+        <summary><span class="pn">3</span>产品方案<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="blk">
+            <h4><span class="bx">3.1</span>核心玩法循环</h4>
+            <div class="fig" style="max-width:100%">
+              <svg viewBox="0 0 900 120" xmlns="http://www.w3.org/2000/svg">
+                <defs><marker id="ah1" markerWidth="9" markerHeight="9" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9aa3b0"/></marker></defs>
+                <g font-family="sans-serif" text-anchor="middle">
+                  <rect x="6" y="34" width="150" height="56" rx="12" fill="#ffc8dd" stroke="#f3a6c0"/><text x="81" y="58" font-size="14" font-weight="700" fill="#7a3a52">合成</text><text x="81" y="76" font-size="11" fill="#9a5a72">食材 / 器物</text>
+                  <line x1="158" y1="62" x2="182" y2="62" stroke="#9aa3b0" stroke-width="2" marker-end="url(#ah1)"/>
+                  <rect x="186" y="34" width="150" height="56" rx="12" fill="#c7f0d8" stroke="#9ad9b4"/><text x="261" y="58" font-size="14" font-weight="700" fill="#2f6b46">经营</text><text x="261" y="76" font-size="11" fill="#4a8a64">交付订单 / 修葺店铺</text>
+                  <line x1="338" y1="62" x2="362" y2="62" stroke="#9aa3b0" stroke-width="2" marker-end="url(#ah1)"/>
+                  <rect x="366" y="34" width="150" height="56" rx="12" fill="#ffd6a5" stroke="#f0b877"/><text x="441" y="58" font-size="13" font-weight="700" fill="#8a5a1e">解锁剧情钩子</text><text x="441" y="76" font-size="11" fill="#a87a3e">古风叙事</text>
+                  <line x1="518" y1="62" x2="542" y2="62" stroke="#9aa3b0" stroke-width="2" marker-end="url(#ah1)"/>
+                  <rect x="546" y="34" width="150" height="56" rx="12" fill="#dcc6ff" stroke="#bda3e8"/><text x="621" y="58" font-size="13" font-weight="700" fill="#5b3a8a">追剧 / 分享裂变</text><text x="621" y="76" font-size="11" fill="#7a5aa8">短剧 + 社交</text>
+                  <line x1="698" y1="62" x2="722" y2="62" stroke="#9aa3b0" stroke-width="2" marker-end="url(#ah1)"/>
+                  <rect x="726" y="34" width="150" height="56" rx="12" fill="#fdffb6" stroke="#e9ec8a"/><text x="801" y="58" font-size="14" font-weight="700" fill="#8a7a1e">次日回流</text><text x="801" y="76" font-size="11" fill="#a89a3e">循环闭合</text>
+                </g>
+              </svg>
+            </div>
+            <div class="cap">古风餐厅「合成 → 经营 → 解锁剧情 → 追剧 / 裂变 → 次日回流」轻量循环（马卡龙配色）</div>
+            <p class="lite">新手封闭教学 ≈5 分钟达成"有效用户"；基础循环 = 合成链（MVP 切片 5 条，目标态 4 类 20 链）× 5 关 + 1 条主线剧情钩子。坚决砍掉社交 / UGC / 复杂装修 / 多角色线 / 排行榜——防功能膨胀。留存三段叠加：合成正反馈 + 经营目标感 + 剧情钩子（标杆次留 45%+，冲刺 50%）。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.2</span>美术与世界观</h4>
+            <p class="lite">以融合唐宋明的架空古风时代为背景，以原创古风叙事语言讲述“餐厅里的人和事”。以 Q版 2.5~3头身 + 豆豆眼 为核心美术特征，并利用AIGC工具，生成模版素材 + 轻量H5/无代码拼装验证，跑通流程后再进行定制制作，以控制美术成本。</p>
+            <div class="imgph">
+              <div class="thumb" onclick="openLB('images/CTS_Character_preview.jpg')"><img src="images/CTS_Character_preview.jpg" alt="角色风格示意" loading="lazy"><div class="tcap">角色风格示意</div></div>
+              <div class="thumb" onclick="openLB('images/CTS_Scene_preview.jpg')"><img src="images/CTS_Scene_preview.jpg" alt="场景风格示意" loading="lazy"><div class="tcap">场景风格示意</div></div>
+              <div class="thumb" onclick="openLB('images/CTS_UI_preview.jpg')"><img src="images/CTS_UI_preview.jpg" alt="界面风格示意" loading="lazy"><div class="tcap">界面风格示意</div></div>
+            </div>
+            <p class="lite cap-center">以上示意图均为AI生成素材，仅作为前期风格示意，不代表最终风格与品质。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.3</span>平台优先级 · 优先小游戏</h4>
+            <div class="fig"><img src="images/platform.png" alt="平台优先级示意图" style="max-width:100%;border-radius:8px;border:1px solid var(--line)"><div class="cap">平台优先级示意</div></div>
+            <p class="lite">结论：小游戏（国内微信 / 抖音 + 海外 TikTok Minis）是验证与变现主战场；APP 与换皮版均为验证成立后的延伸。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.4</span>产品拓展策略（A / B 两线）</h4>
+            <div class="fig"><img src="images/expand_road.png" alt="产品拓展示意图" style="max-width:100%;border-radius:8px;border:1px solid var(--line)"><div class="cap">产品拓展 A/B 两线示意</div></div>
+            <div class="cap">主线验证通过后才启动任一线 · 验证前不双线并行（已排除的"双端齐发"死亡姿势）</div>
+            <p class="lite"><b>A 线：</b>国内小游戏跑通留存与 unit economics，将高价值用户导流独立 APP 做长线 IAP（提高 IAP 占比与客单价，缩短回本周期）。<br><b>B 线：</b>同内核换皮版（中世纪风格「豆豆眼餐馆 The Dot-Eyed Tavern」）切入 TikTok Minis 出海；换皮仅替换 ① 美术皮 ② 语言本地化 ③ 平台 SDK ④ AI 短剧重拍，游戏逻辑 / 数值 / 变现框架零改动。</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- 4 获客与变现 -->
+      <details class="acc">
+        <summary><span class="pn">4</span>获客与变现<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="note">核心理念：以 <b>AI 短剧 + 小游戏联动</b> 降低传统买量依赖，用短剧剧情加强内容比重——让内容本身成为获客与变现的承重墙。</div>
+          <div class="blk">
+            <h4><span class="bx">4.1</span>增长飞轮</h4>
+            <div class="fig" style="max-width:560px">
+              <svg viewBox="0 0 230 160" xmlns="http://www.w3.org/2000/svg">
+                <defs><marker id="ah3" markerWidth="8" markerHeight="8" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#4a6cf7"/></marker></defs>
+                <g font-family="sans-serif" text-anchor="middle">
+                  <ellipse cx="115" cy="80" rx="59" ry="59" fill="none" stroke="#c8d2f5" stroke-width="2" stroke-dasharray="5 5"/>
+                  <circle cx="115" cy="80" r="22" fill="#4a6cf7"/><text x="115" y="76" font-size="11" font-weight="700" fill="#fff">增长</text><text x="115" y="89" font-size="11" font-weight="700" fill="#fff">飞轮</text>
+                  <g font-size="9" font-weight="700" fill="#2e4fd0">
+                    <circle cx="115" cy="21" r="4" fill="#ffc8dd" stroke="#f3a6c0" stroke-width="1"/>
+                    <circle cx="171" cy="60" r="4" fill="#c7f0d8" stroke="#9ad9b4" stroke-width="1"/>
+                    <circle cx="159" cy="129" r="4" fill="#ffd6a5" stroke="#f0b877" stroke-width="1"/>
+                    <circle cx="71" cy="129" r="4" fill="#dcc6ff" stroke="#bda3e8" stroke-width="1"/>
+                    <circle cx="59" cy="60" r="4" fill="#fdffb6" stroke="#e9ec8a" stroke-width="1"/>
+                  </g>
+                  <path d="M125,26 A59,59 0 0 1 166,60" fill="none" stroke="#4a6cf7" stroke-width="1.8" marker-end="url(#ah3)"/>
+                  <path d="M162,69 A59,59 0 0 1 154,125" fill="none" stroke="#4a6cf7" stroke-width="1.8" marker-end="url(#ah3)"/>
+                  <path d="M149,135 A59,59 0 0 1 76,135" fill="none" stroke="#4a6cf7" stroke-width="1.8" marker-end="url(#ah3)"/>
+                  <path d="M66,125 A59,59 0 0 1 62,69" fill="none" stroke="#4a6cf7" stroke-width="1.8" marker-end="url(#ah3)"/>
+                  <path d="M69,60 A59,59 0 0 1 110,26" fill="none" stroke="#4a6cf7" stroke-width="1.8" marker-end="url(#ah3)"/>
+                  <g font-size="9.5" font-weight="700" fill="#3a3a55">
+                    <text x="115" y="12">AI 短剧创作</text>
+                    <text x="181" y="57">古风受众引流</text>
+                    <text x="169" y="143">小游戏承接</text>
+                    <text x="63" y="143">变现 + 留存</text>
+                    <text x="49" y="57">数据反哺</text>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <div class="cap">短剧观众天然想"继续体验"，游戏是最好承接 · 短剧→游 CTR 目标 ≥3%</div>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">4.2</span>获客双轨（自然量为主，买量仅放大）</h4>
+            <div class="fig"><img src="images/customer_acquisition.png" alt="获客双轨示意" style="max-width:100%;border-radius:8px;border:1px solid var(--line)"><div class="cap">获客双轨示意 · 自然量（主）与买量（放大）汇入综合获客</div></div>
+            <div class="fig" style="max-width:570px;margin-top:14px">
+              <svg viewBox="0 0 380 250" xmlns="http://www.w3.org/2000/svg">
+                <g font-family="sans-serif" text-anchor="middle">
+                  <circle cx="190" cy="125" r="115" fill="#bfdbfe" opacity=".25" stroke="#60a5fa" stroke-width="1.5"/>
+                  <circle cx="190" cy="125" r="76" fill="#c7f0d8" opacity=".35" stroke="#9ad9b4" stroke-width="1.5"/>
+                  <circle cx="190" cy="125" r="38" fill="#ffd6a5" opacity=".45" stroke="#f0b877" stroke-width="1.5"/>
+                  <text x="190" y="128" font-size="12" font-weight="700" fill="#7c2d12">种子≈100人</text>
+                  <text x="190" y="78" font-size="12" font-weight="700" fill="#166534">短剧粉丝主力</text>
+                  <text x="190" y="180" font-size="12" font-weight="700" fill="#1e40af">平台自然量+小红书</text>
+                  <text x="190" y="18" font-size="13" font-weight="700" fill="#1a1a2e">同心圆触达</text>
+                </g>
+              </svg>
+            </div>
+            <table class="data-table" style="margin-top:10px">
+              <tr><th>轨道</th><th>方式</th><th>成本</th><th>阶段</th></tr>
+              <tr><td><b>自然量（主）</b></td><td>抖音 / 视频号剧情向 AI 短剧 + 小红书古风种草 + 微信私域</td><td>≈0</td><td>全程，早期主力</td></tr>
+              <tr><td><b>买量（放大）</b></td><td>巨量 / 广点通，CPA 硬门槛 ≤ ￥5</td><td>￥5 / 注册</td><td>仅 model 验证后放大</td></tr>
+            </table>
+            <p class="lite"><b>同心圆触达（由内到外）：</b>① 内圈（种子）团队私域 + 朋友，约 100 人测次留与崩溃率；② 中圈（主力）AI 短剧粉丝——剧中 / 剧末挂小游戏链接，角色"客串顾客"引导进游戏；③ 外圈（放大）平台自然量 + 小红书古风种草。</p>
+            <p class="lite"><b>内容节奏：</b>每周 2–3 条剧情向 AI 短剧（古风餐厅里的人和事），抖音 / 视频号分发，剧末 / 评论区挂小游戏；微信社群做剧情投票、新关卡预告，提升回流。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">4.3</span>双变现引擎</h4>
+            <div class="subgrid g2">
+              <div class="subcard" style="border-top:3px solid var(--cyan)"><div class="st">📺 IAA（广告）</div><div class="sd">激励视频（复活 / 体力 / 加速）；插屏节制。<br><b>定位：</b>首日第一变现途径，但占总 LTV <b>≤5%</b>。</div></div>
+              <div class="subcard" style="border-top:3px solid var(--gold)"><div class="st">💎 IAP（内购）</div><div class="sd">
+                <b>IAP 内容清单：</b><br>
+                · 去广告包　￥6–12<br>
+                · 体力 / 资源包　￥1–30<br>
+                · 限时皮肤 / 餐厅主题　￥6–18<br>
+                · 成长基金（买断制进度奖励）<br>
+                · 月度战令　￥18–30（含限定皮肤 + 资源返利）<br>
+                · 赛季战令（配合剧情节点）<br>
+                · 新手 7 日战令　￥6（首充引导）<br>
+                <b>定位：</b>产品 LTV 主来源。
+              </div></div>
+            </div>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">4.4</span>LTV 成长曲线（每注册用户 / 元）</h4>
+            <div class="fig" style="max-width:680px">
+              <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg">
+                <g font-family="sans-serif" font-size="11" fill="#6b7b8d">
+                  <line x1="60" y1="260" x2="720" y2="260" stroke="#dde3ec" stroke-width="1.5"/>
+                  <line x1="60" y1="40" x2="60" y2="260" stroke="#dde3ec" stroke-width="1.5"/>
+                  <text x="40" y="262" text-anchor="end">0</text><text x="40" y="150" text-anchor="end">2.0</text><text x="40" y="44" text-anchor="end">4.0</text>
+                  <line x1="60" y1="150" x2="720" y2="150" stroke="#eee" stroke-dasharray="4 4"/>
+                  <g text-anchor="middle">
+                    <text x="60" y="278">首日</text><text x="142.5" y="278">3日</text><text x="225" y="278">7日</text><text x="307.5" y="278">14日</text><text x="390" y="278">30日</text><text x="472.5" y="278">45日</text><text x="555" y="278">60日</text><text x="637.5" y="278">90日</text><text x="720" y="278">120日</text>
+                  </g>
+                </g>
+                <polyline points="60,251.8 142.5,243.5 225,229.8 307.5,205 390,172 472.5,144.5 555,122.5 637.5,78.5 720,40" fill="none" stroke="#4a6cf7" stroke-width="2.5"/>
+                <g fill="#4a6cf7">
+                  <circle cx="60" cy="251.8" r="3.5"/><circle cx="142.5" cy="243.5" r="3.5"/><circle cx="225" cy="229.8" r="3.5"/><circle cx="307.5" cy="205" r="3.5"/><circle cx="390" cy="172" r="3.5"/><circle cx="472.5" cy="144.5" r="3.5"/><circle cx="555" cy="122.5" r="3.5"/><circle cx="637.5" cy="78.5" r="3.5"/><circle cx="720" cy="40" r="3.5"/>
+                </g>
+                <text x="660" y="34" font-family="sans-serif" font-size="11" font-weight="700" fill="#2e4fd0">120日 LTV ￥4.0</text>
+              </svg>
+            </div>
+            <table class="data-table">
+              <tr><th>日</th><th>首日</th><th>3日</th><th>7日</th><th>14日</th><th>30日</th><th>45日</th><th>60日</th><th>90日</th><th>120日</th></tr>
+              <tr><td>LTV（元）</td><td>0.15</td><td>0.30</td><td>0.55</td><td>1.00</td><td>1.60</td><td>2.10</td><td>2.50</td><td>3.30</td><td>4.00</td></tr>
+              <tr><td>倍率（vs 首日）</td><td>1.0x</td><td>2.0x</td><td>3.5x</td><td>7.0x</td><td>10.5x</td><td>14.0x</td><td>17.0x</td><td>22.0x</td><td>27.0x</td></tr>
+            </table>
+              <p class="lite">首日 IAP：付费率 1.5% × ARPPU ￥10 = 首日 IAP LTV ￥0.15；买量首日 ROI 3%。IAA≤5% 的取舍：抬高叙事与长线内容要求，但契合"内容 / IP 驱动 IAP"定位，LTV 比纯广告型小游戏更依赖留存深度——需确保剧情产能。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">4.5</span>单用户经济效益模型（Unit Economics）</h4>
+            <div class="fig" style="max-width:680px">
+              <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg">
+                <g font-family="sans-serif" font-size="11" fill="#6b7b8d">
+                  <line x1="60" y1="260" x2="720" y2="260" stroke="#dde3ec" stroke-width="1.5"/>
+                  <line x1="60" y1="40" x2="60" y2="260" stroke="#dde3ec" stroke-width="1.5"/>
+                  <line x1="60" y1="100" x2="720" y2="100" stroke="#eee" stroke-dasharray="4 4"/>
+                  <text x="40" y="262" text-anchor="end">0</text>
+                  <text x="36" y="104" text-anchor="end">￥4.0</text>
+                  <text x="36" y="64" text-anchor="end">￥5.0</text>
+                  <text x="180" y="282" text-anchor="middle">自然 ≥20%</text>
+                  <text x="400" y="282" text-anchor="middle">自然 10–15%</text>
+                  <text x="600" y="282" text-anchor="middle">自然 50%</text>
+                </g>
+                <rect x="60" y="60" width="660" height="40" fill="#e74c3c" opacity=".12"/>
+                <g>
+                  <rect x="120" y="100" width="120" height="160" fill="#4a6cf7"/><text x="180" y="94" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#2e4fd0" font-weight="700">CAC 4.0</text>
+                  <rect x="340" y="84" width="120" height="176" fill="#7d97f7"/><text x="400" y="78" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#2e4fd0" font-weight="700">CAC 4.4</text>
+                  <rect x="540" y="160" width="120" height="100" fill="#27ae60"/><text x="600" y="154" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1e8449" font-weight="700">CAC 2.5</text>
+                </g>
+                <line x1="60" y1="100" x2="720" y2="100" stroke="#e74c3c" stroke-width="2"/>
+                <line x1="60" y1="60" x2="720" y2="60" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="6 4"/>
+                <text x="64" y="94" text-anchor="start" font-family="sans-serif" font-size="11" font-weight="700" fill="#e74c3c">120日 LTV基准</text>
+                <text x="400" y="52" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#e74c3c">120~150日 LTV区间</text>
+              </svg>
+            </div>
+            <p class="lite">综合 CAC = ￥5 × 买量占比（自然量 CAC≈0）。自然 ≥20%（买量 ≤80%）→ CAC ≤4.0 → <b>120 日回本</b>；自然 10–15% → CAC 4.25–4.5 → <b>回本延长至约 150 天+</b>；自然 50% → CAC 2.5 → 约 60 日回本、ROI 160%。真正约束是<b>现金跑道 ≥ 回本周期</b>——自有现金流撑得住 150+ 天垫资，模型仍成立。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">4.6</span>CPS 变现可能（拓展）</h4>
+            <p class="lite">国内微信 / 抖音均在逐步开放 <b>CPS（按成交分佣）</b>；海外 TikTok 本就开放内容电商挂载。CPS 可作为验证后期、自然流量溢出时的增量变现通道，<b>不纳入早期核心模型</b>，仅作拓展观察。</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- 5 验证指标体系 -->
+      <details class="acc">
+        <summary id="ppa-s5"><span class="pn">5</span>验证指标体系<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="warn">🔒 <b>买量注册成本 ≤￥5</b> 与 <b>有效次留 ≥50%</b> 为不可调整硬门槛；其余为达标线。这是"先卖后造"的通过线。</div>
+          <table class="data-table" id="pa5-metrics">
+            <tr><th>#</th><th>指标</th><th>预设目标</th><th>业内参照（休闲 / 经营类 2024–2025）</th></tr>
+            <tr><td>1</td><td>买量注册成本</td><td><b>≤ ￥5 / 注册</b></td><td>￥4–15（古风 / 女性向偏 ￥6–12）</td></tr>
+            <tr><td>2</td><td>有效用户标准</td><td>完成封闭新手教学 + 开放操作 1–2 关 / 基础循环，时长 ≈5 分钟</td><td>—</td></tr>
+            <tr><td>3</td><td>注册有效率</td><td>自然 ≥45% / 买量 ≥35% / 综合 ≥40%</td><td>—</td></tr>
+            <tr class="highlight"><td>4</td><td>有效次留率</td><td><b>≥50%</b>（折算注册次留 ≥20%）</td><td>35–50%（一线水平）</td></tr>
+            <tr><td>5</td><td>首日 IAP</td><td>付费率 1.5%、ARPPU ￥10 → LTV ￥0.15；首日 ROI 3%</td><td>付费率 1–3%；首日 ROI 8–15%</td></tr>
+            <tr><td>6</td><td>付费用户留存</td><td>次留 ≥70%</td><td>60–75%</td></tr>
+            <tr><td>7</td><td>IAA 定位</td><td>首日第一变现途径，占总 LTV ≤5%</td><td>—</td></tr>
+            <tr><td>8</td><td>LTV 回本线</td><td>综合 LTV ≥ ￥4.00 回本，理想 ￥4.50–5.00</td><td>120 日 LTV / 注册 ￥4–20</td></tr>
+            <tr><td>+</td><td>短剧→游 CTR</td><td>≥3%</td><td>—</td></tr>
+          </table>
+          <div class="note2"><b>护栏（不降门槛，但给保险）：</b>买量成本护栏——① 早期完全不买量（CPA≈0）；② 实测破 5 靠提升自然占比兜底（自然占比每 +5%，综合 CAC 降约 0.25，按买量占比 50% 计）；③ <b>熔断</b>：买量 CPA 连续 3 日 > ￥7 即停量，回自然量主线。有效次留护栏——硬门槛 50% + <b>黄灯 40%</b>（40–50% 属"迭代玩法钩子"，不 Pivot）；连续批次 &lt;40% 才 Pivot。上述护栏在路线图阶段四 / 五 固化为红黄灯机制。</div>
+        </div>
+      </details>
+
+      <!-- 6 里程碑路线图 -->
+      <details class="acc">
+        <summary id="ppa-s6"><span class="pn">6</span>里程碑路线图<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="blk">
+            <h4><span class="bx">6.1</span>路线图总览</h4>
+            <div class="fig" style="max-width:800px">
+              <svg viewBox="0 0 900 130" xmlns="http://www.w3.org/2000/svg">
+                <defs><marker id="ah5" markerWidth="9" markerHeight="9" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9aa3b0"/></marker></defs>
+                <g font-family="sans-serif" text-anchor="middle">
+                <!-- Main arrow extending past node 5 -->
+                <line x1="50" y1="60" x2="885" y2="60" stroke="#c8d2f5" stroke-width="3" marker-end="url(#ah5)"/>
+                <g>
+                  <circle cx="55" cy="60" r="8" fill="#9aa3b0"/><text x="55" y="104" font-size="12" font-weight="600" fill="#3a3a55">团队就位</text>
+                  <circle cx="200" cy="60" r="22" fill="#4a6cf7"/><text x="200" y="65" font-size="15" font-weight="700" fill="#fff">1</text><text x="200" y="104" font-size="12" font-weight="600" fill="#3a3a55">MVP版本</text>
+                  <text x="200" y="118" font-size="10" fill="#888">建生产线</text>
+                  <circle cx="345" cy="60" r="22" fill="#4a6cf7"/><text x="345" y="65" font-size="15" font-weight="700" fill="#fff">2</text><text x="345" y="104" font-size="12" font-weight="600" fill="#3a3a55">3日版本</text>
+                  <circle cx="490" cy="60" r="22" fill="#4a6cf7"/><text x="490" y="65" font-size="15" font-weight="700" fill="#fff">3</text><text x="490" y="104" font-size="12" font-weight="600" fill="#3a3a55">7日版本</text>
+                  <circle cx="635" cy="60" r="22" fill="#4a6cf7"/><text x="635" y="65" font-size="15" font-weight="700" fill="#fff">4</text><text x="635" y="104" font-size="12" font-weight="600" fill="#3a3a55">长线盯数</text>
+                  <circle cx="780" cy="60" r="22" fill="#f0a500"/><text x="780" y="65" font-size="15" font-weight="700" fill="#fff">5</text><text x="780" y="104" font-size="12" font-weight="600" fill="#3a3a55">拓展产品</text>
+                </g>
+                <!-- week gaps between nodes -->
+                <g font-size="11" font-weight="600" fill="#5a6b7d">
+                  <text x="127" y="40">6~8周</text>
+                  <text x="272" y="40">8~10周</text>
+                  <text x="417" y="40">10~12周</text>
+                </g>
+                </g>
+              </svg>
+            </div>
+            <div class="cap">每阶段设明确闸门，未达标不进入下一阶段（严守"验证后才加码"的 bootstrapping 纪律）</div>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">6.2</span>阶段总表</h4>
+            <table class="data-table" id="pa6-table">
+              <tr><th>#</th><th>阶段</th><th>核心目标</th><th>关键交付</th><th>6 人团队周期</th><th>9 人团队周期</th></tr>
+              <tr><td>1</td><td>MVP 版本</td><td>跑通两个循环（建生产线）</td><td>可玩核心循环原型 + AI 短剧内容引擎流水线</td><td>T0–T0+8 周</td><td>T0–T0+6 周</td></tr>
+              <tr><td>2</td><td>3 日版本</td><td>验证留存与引流</td><td>可提交 3 日+ 版本（含 3 日留存循环与钩子）</td><td>T0+8–T0+18 周</td><td>T0+6–T0+14 周</td></tr>
+              <tr><td>3</td><td>7 日版本</td><td>验证短期付费</td><td>可提交 7 日+ 版本</td><td>T0+18–T0+30 周</td><td>T0+14–T0+24 周</td></tr>
+              <tr><td>4</td><td>长线盯数</td><td>长线 LTV 达标</td><td>长线运营 + 红黄灯机制</td><td colspan="2" style="text-align:center">阶段三达标后启动（两方案一致）</td></tr>
+              <tr><td>5</td><td>拓展产品</td><td>规模放大 + 多市场</td><td>国内买量放大 + APP / 海外换皮准备</td><td colspan="2" style="text-align:center">阶段四达标后启动（两方案一致）</td></tr>
+            </table>
+            <p class="lite">稳健（6 人）前三阶段总周期约 <b>30 周</b>（8+10+12），以更长周期换更低 burn；快速（9 人）约 <b>24 周</b>（6+8+10），以更高 burn 压缩约 20% 总周期。阶段四 / 五为达标触发式，不绑定固定周数。</p>
+            <div class="note2">注：以上进程<b>不包括软著 &amp; 版号准备时间</b>。如涉及软著 &amp; 版号准备，则在 MVP 阶段<b>增加 2 周</b>用于准备提审版本，7 日付费版本将根据版号进度<b>延后 2~4 周</b>（按 3~6 个月常规周期上限折算）。详见本页 <a class="doclink" data-jump="mvp" data-anchor="mvp-s5">MVP 设计文档 §5（软著 &amp; 版号版本准备）</a>。</div>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">6.3</span>各阶段细化（折叠卡片）</h4>
+            <details class="stage">
+              <summary><span class="sn">1</span><span class="stt">MVP 版本</span><span class="stg">跑通两个循环</span><span class="sar">▶</span></summary>
+              <div class="stagebody">
+                <p class="lite"><b>工作目标：</b>① 锁定 1 个核心循环（合成→经营→解锁剧情钩子）与美术基调；完成封闭新手教学 + 开放操作 1–2 关 / 基础循环（≈5 分钟达成"有效用户"）。② 搭建 AI 短剧内容引擎生产线（脚本模板、分镜流水线、精修 SOP）——按"可复用生产线"标准搭建。</p>
+                <p class="lite"><b>关键交付：</b>可玩核心循环原型；第 1 条 AI 短剧成片过审；内容引擎 SOP 文档。</p>
+                <p class="lite"><b>三色灯：</b>本阶段不设对外闸门（重点"把两条生产线建起来"），内部以"可玩、逻辑自洽、首片过审"为完成判据。</p>
+              </div>
+            </details>
+            <details class="stage">
+              <summary><span class="sn">2</span><span class="stt">3 日版本</span><span class="stg">验证留存与引流</span><span class="sar">▶</span></summary>
+              <div class="stagebody">
+                <p class="lite"><b>工作目标：</b>交付可提交 3 日+ 版本（合成链由 MVP 切片扩至目标态 4 类 20 链 + 5 关 + 1 条主线剧情钩子 + 3 日回流设计）。</p>
+                <p class="lite"><b>验证指标：</b>留存侧——注册有效率（自然≥45% / 买量≥35% / 综合≥40%）、有效次留≥50%（黄灯 40%）、注册次留≥20%。引流侧——AI 短剧流量获取能力（完播率、涨粉、自然占比）；短剧→游 CTR≥3%、进游注册数。</p>
+                <table class="matrix-table">
+                  <tr><th>指标</th><th>🟢 绿灯</th><th>🟡 黄灯</th><th>🔴 红灯</th></tr>
+                  <tr><td>有效次留</td><td>≥50%</td><td>40–50%</td><td>连续批次 &lt;40%</td></tr>
+                  <tr><td>注册有效率（综合）</td><td>≥40%</td><td>30–40%</td><td>&lt;30%</td></tr>
+                  <tr><td>短剧→游 CTR</td><td>≥3%</td><td>1.5–3%</td><td>&lt;1.5%</td></tr>
+                </table>
+                <p class="lite"><b>判定：</b>留存与引流双侧达标 → 进阶段三；任一侧不达标 → 迭代对应循环（玩法钩子或短剧分镜），不 Pivot。</p>
+              </div>
+            </details>
+            <details class="stage">
+              <summary><span class="sn">3</span><span class="stt">7 日版本</span><span class="stg">验证短期付费</span><span class="sar">▶</span></summary>
+              <div class="stagebody">
+                <p class="lite"><b>工作目标：</b>交付可提交 7 日+ 版本，内容深度支撑 7 日留存与首周付费。</p>
+                <p class="lite"><b>验证指标：</b>1–7 日 LTV（首日 0.15 / 3 日 0.30 / 7 日 0.55）；首日 IAP 付费率 1.5%、ARPPU ￥10、买量首日 ROI 3%；付费用户次留≥70%。</p>
+                <p class="lite"><b>三色灯：</b>付费指标达标 → 进阶段四；付费率 / ARPPU 偏差大 → 限期优化内购点与定价（阶段四黄灯处理）。</p>
+              </div>
+            </details>
+            <details class="stage">
+              <summary><span class="sn">4</span><span class="stt">长线盯数</span><span class="stg">长线 LTV 达标</span><span class="sar">▶</span></summary>
+              <div class="stagebody">
+                <p class="lite"><b>工作目标：</b>重点盯 LTV 成长曲线至 120 日 ≥4.0，持续监测留存与引流健康度。</p>
+                <p class="lite"><b>验证指标：</b>120 日 LTV≥4.0；有效次留≥50%；自然占比≥20%。</p>
+                <table class="matrix-table">
+                  <tr><th>指标</th><th>🟢 绿灯（健康）</th><th>🟡 黄灯（限期优化）</th><th>🔴 红灯（叫停）</th></tr>
+                  <tr><td>有效次留</td><td>≥50%</td><td>40–50%</td><td>连续批次 &lt;40%</td></tr>
+                  <tr><td>注册有效率（综合）</td><td>≥40%</td><td>30–40%</td><td>&lt;30%</td></tr>
+                  <tr><td>自然占比</td><td>≥20%</td><td>10–20%</td><td>&lt;10%</td></tr>
+                  <tr><td>LTV 曲线偏离</td><td>≥目标值</td><td>实际 &lt; 目标×0.8</td><td>实际 &lt; 目标×0.6 连续 2 周</td></tr>
+                  <tr><td>短剧→游 CTR</td><td>≥3%</td><td>1.5–3%</td><td>&lt;1.5%</td></tr>
+                </table>
+                <p class="lite"><b>红灯动作：</b>立即叫停相关动作，复盘明确恢复条件后再启动。<b>黄灯动作：</b>维持现状、设 7–14 日限期优化，到期复测未达标则升级红灯或 Pivot。</p>
+              </div>
+            </details>
+            <details class="stage">
+              <summary><span class="sn">5</span><span class="stt">拓展产品</span><span class="stg">规模放大 + 多市场</span><span class="sar">▶</span></summary>
+              <div class="stagebody">
+                <p class="lite"><b>前置条件：</b>阶段四达标（120 日 LTV≥4.0、有效次留≥50%、自然占比≥20%）、unit economics 成立。</p>
+                <p class="lite"><b>工作目标：</b>① 国内买量放大；② 同步准备 A 线 APP 承接版 / B 线 TikTok Mini Games 中世纪换皮版（复用内核 + 内容引擎）。</p>
+                <p class="lite"><b>验证指标：</b>买量 ROI 转正、120 日 LTV≥4.0。</p>
+                <table class="matrix-table">
+                  <tr><th>灯色</th><th>含义</th><th>动作</th></tr>
+                  <tr><td>🟢 绿灯</td><td>综合指标达标（ROI 健康、CPA≤5、次留达标）</td><td>升档扩大买量规模</td></tr>
+                  <tr><td>🟡 黄灯</td><td>某指标临界（CPA 5–7、次留 40–50%、自然 10–20%）</td><td>维持当前量，限期优化，不升档</td></tr>
+                  <tr><td>🔴 红灯</td><td>核心指标破红线（CPA 连续 3 日 >7、次留&lt;40%、LTV 严重偏离）</td><td>立即叫停买量，回自然量主线复盘</td></tr>
+                </table>
+              </div>
+            </details>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- MVP -->
+    <section class="sec" id="mvp">
+      <h2>MVP 设计文档</h2>
+      <div class="lead">MVP（最小可上线验证版本）设计规格与阶段一（建生产线）执行清单。整合自本页「项目方案概览」MVP 版本定义。本页自包含；上游硬门槛以本页 <a class="doclink" data-jump="ppa" data-anchor="ppa-s5">项目方案概览 §5 验证指标体系</a> 为权威定义。</div>
+
+      <style>
+        #mvp{font-size:15px}
+        #mvp .acc>summary{font-size:18px}
+        #mvp .blk h4{font-size:16px}
+        #mvp .subcard .st{font-size:14px}
+        #mvp .subcard .sd{font-size:13px;line-height:1.7}
+        #mvp .lite{font-size:13px;line-height:1.75}
+        #mvp .note2{font-size:13px;padding:10px 14px}
+        #mvp .warn{font-size:13px;padding:13px 18px}
+        #mvp .accbody{padding-top:6px}
+        #mvp .cap{font-size:12.5px}
+        #mvp .data-table{font-size:14px}
+        #mvp .data-table th{padding:13px 15px;font-size:13.5px}
+        #mvp .data-table td{padding:12px 15px;font-size:13.5px}
+      </style>
+
+      <!-- 1 MVP 版本定义 -->
+      <details class="acc" open>
+        <summary><span class="pn">1</span>MVP 版本定义<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="blk">
+            <h4><span class="bx">1.1</span>核心目标</h4>
+            <div class="subgrid g2">
+              <div class="subcard"><div class="st">跑通两个循环（建生产线）</div><div class="sd">① 锁定 1 个核心循环（合成→经营→解锁剧情钩子）与美术基调；完成封闭新手教学 + 开放操作 1–2 关 / 基础循环（≈5 分钟达成"有效用户"）。② 搭建 AI 短剧内容引擎生产线（脚本模板、分镜流水线、精修 SOP），按"可复用生产线"标准搭建。</div></div>
+              <div class="subcard"><div class="st">阶段纪律</div><div class="sd">MVP 阶段不设对外闸门，重点"把两条生产线建起来"；内部以 <b>"可玩、逻辑自洽、首片过审"</b> 为完成判据。</div></div>
+            </div>
+          </div>
+          <div class="blk">
+            <h4 id="mvp-s12"><span class="bx">1.2</span>关键交付</h4>
+            <div class="subgrid g3">
+              <div class="subcard"><div class="st">① 可玩核心循环原型</div><div class="sd">产品侧，另由程序 / 策划交付。</div></div>
+              <div class="subcard"><div class="st">② 第 1 条 AI 短剧成片过审</div><div class="sd">须过精修红线（见 §3.6）。</div></div>
+              <div class="subcard"><div class="st">③ 内容引擎 SOP 文档</div><div class="sd">即「AI 短剧制作 SOP」（见 §3）。</div></div>
+            </div>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">1.3</span>MVP 范围</h4>
+            <p class="lite"><b>做这些（MVP 硬边界）：</b>1 个核心循环（合成 + 经营）；古风餐厅皮（单场景、唐宋明架空、Q 版 2.5~3 头身 + 豆豆眼、食魂 mascot）；合成链切片（MVP 5 条：食材×2+器物×1+菜品×1+道具×1，目标态 4 类 20 链）+ 5 关；1 条主线剧情钩子；激励视频 IAA 接入 + 基础 IAP；短剧→游转化埋点。</p>
+            <p class="lite"><b>砍掉清单（留待阶段③/④ 验证后）：</b>社交 / 公会 ｜ 多端同步 ｜ UGC ｜ 复杂装修系统 ｜ 多角色线 ｜ 排行榜 ｜ 复杂分支剧情 ｜ 大量美术变体 ｜ 重度 IAP 系统 ｜ 长线运营活动。</p>
+            <div class="note2">变现前提：IAA 占总 LTV ≤ 5%；不破坏首日体验。</div>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">1.4</span>变现嵌入点</h4>
+            <p class="lite"><b>IAA</b>：激励视频（复活 / 体力 / 加速），插屏节制使用保体验。</p>
+            <p class="lite"><b>IAP</b>：去广告包 ¥6–12；体力 / 资源包 ¥1–30；限时古风皮肤 / 餐厅主题 ¥6–18。</p>
+            <p class="lite">嵌入时机前提见 §1.3（IAA 占总 LTV ≤ 5%，不破坏首日体验）。</p>
+            <div class="note2" style="margin-top:8px"><b>MVP 阶段说明：</b>上述付费点位主要为<b>体验感受与版号版本申报需要</b>而预留界面与交互路径，<b>不真实接入 IAA / IAP 后端结算功能</b>。实际商业化接入留待阶段③/④验证后再接通。</div>
+          </div>
+          <div class="note2">路线图位置：团队就位（起点）→ <b>1 MVP 版本（建生产线）</b> → 2 3日版本 → 3 7日版本 → 4 长线盯数 → 5 拓展产品。周期：团队就位 ~ MVP <b>6~8 周</b>；MVP 阶段 6 人 T0–T0+8 周 / 9 人 T0–T0+6 周。详见本页 <a class="doclink" data-jump="ppa" data-anchor="ppa-s6">项目方案概览 §6.1 / §6.2 / §6.3</a>。</div>
+        </div>
+      </details>
+
+      <!-- 2 核心循环原型 -->
+      <details class="acc">
+        <summary><span class="pn">2</span>核心循环原型<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="blk">
+            <h4><span class="bx">2.1</span>核心玩法循环</h4>
+            <div class="flow2">
+              <div class="nd" style="background:#e7f1fb">合成（食材/器物）</div><div class="ar">→</div>
+              <div class="nd" style="background:#e9f7ef">经营（交付订单/修葺店铺）</div><div class="ar">→</div>
+              <div class="nd" style="background:#f3ebfb">解锁剧情钩子</div><div class="ar">→</div>
+              <div class="nd" style="background:#fff3e0">追剧/分享裂变</div><div class="ar">→</div>
+              <div class="nd" style="background:#e8f5e9">次日回流</div>
+            </div>
+            <p class="lite">餐厅具体实例化：合成食材 → 交付订单换取资源 → 修葺店铺推进经营任务 → 推动剧情 → 解锁更多合成元素。〔待细化：每一环的"用户动作 + 正反馈 + 单环时长"，串成 5 分钟不冷场体验链。〕</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">2.2</span>合成链设计</h4>
+            <p class="lite"><b>二合连续单线</b>：每级消耗 2 个上一级产物 → 产出 1 个下一级；每条链 A→B→C→… 单一线性、无分叉。层数 n 的链，产 1 个顶层需 2^(n-1) 个最底层材料——<b>复利成本是节奏旋钮</b>。</p>
+            <table class="data-table">
+              <thead><tr><th>类别</th><th>数量</th><th>单链长度（目标态）</th><th>性质 / 发射器行为</th></tr></thead>
+              <tbody>
+                <tr><td>食材链</td><td>×8（主食/蔬菜/禽类/肉类/鱼类/虾蟹/水果/香料，分 2 组各 4）</td><td>8–12</td><td>原料合成线，本身不发射，作为被发射物</td></tr>
+                <tr><td>器物链</td><td>×4（菜篮/渔具/畜栏/货架）</td><td>10</td><td>永久发射器（有 CD，不消失），按节点阶梯发射食材</td></tr>
+                <tr><td>菜品链</td><td>×4</td><td>6–8</td><td>消耗性发射器（顶阶食材化身，发射 N 次后消失），发射菜品</td></tr>
+                <tr><td>道具链</td><td>×4（宝箱/礼盒/体力瓶等）</td><td>2–4</td><td>资源发射器，发射金币/钻石/体力/任意链物品</td></tr>
+              </tbody>
+            </table>
+            <p class="lite"><b>器物节点发射阶梯（长 10 为例）</b>：节点 1–3 不发射；4 发射组1·物1；5 增连续发射量；6 增组2·物1；7 几率发射组1·物2；8 几率发射组2·物2；9 增连续发射量；10 提两组物2 几率。更高节点延续「扩组→扩物品→提量→提几率」四拍循环。</p>
+            <p class="cap">MVP 切片（硬边界）：不铺满 20 链，仅验证机制——食材×2 + 器物×1 + 菜品×1 + 道具×1 = 5 条代表性链，各开放前 3–4 层（顶阶不进 MVP）。</p>
+            <p class="lite"><b>钩子</b>：合成产物即剧情道具；「食魂」作为合成 mascot NPC 串联短剧与游戏。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">2.3</span>经营循环</h4>
+            <p class="lite"><b>交付订单（食材 or 菜品）⇒ 获得资源</b>：将合成产出的食材 / 菜品交付顾客订单，换取金币 / 钻石 / 体力等资源。</p>
+            <p class="lite"><b>修葺店铺 ⇒ 完成经营任务</b>：用资源推进店铺修葺，每阶段修葺目标对应一项经营任务；完成修葺即推进剧情与解锁。经营目标感与合成正反馈在「交付→修葺→解锁」上闭环。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">2.4</span>解锁剧情</h4>
+            <p class="lite">1 条主线剧情钩子，卡点弹剧情。短剧→游 CTR <b>≥ 3%</b>（硬指标，低于即触发验证体系黄灯）。钩子具体埋点：分镜埋钩 / 剧末 CTA / 角色客串（见 §3）。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">2.5</span>新手 5 分钟路径</h4>
+            <div class="flow2">
+              <div class="nd" style="background:#e7f1fb">封闭教学：开场剧情导入 → 场景展示 → 合成棋牌 → 器物合成×1 → 食材发射×1 → 食材合成×2 → 交付订单×2 → 修葺店铺×1</div>
+            </div>
+            <div class="flow2" style="margin-top:6px">
+              <div class="nd" style="background:#e9f7ef">开放操作：解锁剧情 → 继续循环×2</div><div class="ar">→</div>
+              <div class="nd" style="background:#e8f5e9">体验 ≈ 5 分钟 = 有效用户</div>
+            </div>
+            <p class="lite"><b>封闭教学边界</b>：从「开场剧情导入」到第一个「修葺店铺 ×1」完成为强制引导的封闭教学；其后（解锁剧情 / 继续循环）转为开放操作。</p>
+            <p class="lite">衔接 AI 短剧：开场剧情导入承接 AI 短剧末尾 CTA，做到剧游无缝衔接。〔待细化：分步教学脚本、卡点节奏、首屏 30 秒留存设计。〕</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- 3 AI 短剧制作 SOP -->
+      <details class="acc">
+        <summary><span class="pn">3</span>AI 短剧制作 SOP<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="note2">来源：「AI 短剧制作 SOP」v3.0。按"换皮出海零成本复用"标准搭建——结构、模板、流水线、精修 SOP 全部抽象成可迁移资产，换题材只换皮、不换骨架。关键纪律：每条短剧在<b>分镜阶段就埋好游戏钩子</b>，不是成片后硬贴链接。完整 SOP 见本页 <a class="doclink" data-jump="ai-drama">AI 短剧制作 SOP</a>。</div>
+          <div class="blk">
+            <h4><span class="bx">3.1</span>剧本选题（主题库 + 钩子库）</h4>
+            <p class="lite"><b>工具</b>：飞书多维表格 / Notion（主题×钩子双表）+ 对话式大模型（GPT-5 / Claude / Kimi）扩写钩子。</p>
+            <p class="lite"><b>双层钩子库</b>：通用钩子（打脸爽点 / 逆袭高光 / 公平反击 / 独立清醒 / 悬念卡点，跨主题复用）+ 特定钩子（按五大母题绑定游戏节点）。</p>
+            <p class="lite"><b>五大母题（大女主向）</b>：① 厨艺打脸 ② 身世逆袭 ③ 经营危机 ④ 合成彩蛋 ⑤ 高光节日；每条映射一个游戏内解锁节点（剧情钩子→次日回流）。</p>
+            <p class="lite"><b>主题储备纪律</b>：主投「大女主古风餐厅逆袭」；常备 ≥2 套备用主题（含换皮出海「中世纪女厨酒馆逆袭」），红灯触发 24h 内切换不空档。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.2</span>剧情脚本（分镜细化）</h4>
+            <p class="lite"><b>工具</b>：GPT-5（备选 Claude / Kimi）+ 分镜模板。</p>
+            <p class="lite">每条 ≤60s，前 3 秒有钩子、剧末 CTA 清晰；结构铁律：钩子前置（镜 1–3）、情绪中段、悬念卡点收尾（剧末 = 游戏入口）。</p>
+            <p class="lite"><b>大女主红线</b>：苏望月为唯一核心驱动者，女主须为行动发起者，禁"等男主救 / 恋爱脑"；游戏钩子栏分镜阶段必填。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.3</span>角色 & 场景设定</h4>
+            <p class="lite"><b>工具</b>：GPT-Image-2（角色卡 + 场景概念图，固定 seed + 参考图保一致）。</p>
+            <table class="data-table">
+              <thead><tr><th>角色</th><th>定位</th><th>性格钩子</th><th>游戏内复用</th></tr></thead>
+              <tbody>
+                <tr><td>苏望月</td><td>大女主·食坊主理</td><td>坚韧清醒，被逐后逆袭</td><td>玩家化身 / 主线驱动</td></tr>
+                <tr><td>赵氏</td><td>继母反派</td><td>伪善打压，夺店阴谋</td><td>反派事件 NPC</td></tr>
+                <tr><td>陆三郎</td><td>退婚渣男</td><td>势利背叛</td><td>反派事件 NPC</td></tr>
+                <tr><td>金满楼掌柜</td><td>同行打压</td><td>嫉妒使绊</td><td>经营危机事件</td></tr>
+                <tr><td>小满</td><td>学徒厨娘</td><td>笨拙可爱，渴望被认可</td><td>新手教学陪伴</td></tr>
+                <tr><td>老顾</td><td>退休名厨</td><td>神秘点拨</td><td>合成链解锁者</td></tr>
+                <tr><td>食魂</td><td>合成 mascot</td><td>古旧食谱精灵</td><td>合成玩法 mascot</td></tr>
+              </tbody>
+            </table>
+            <p class="lite">生图要求：角色一致性（固定 seed / 参考图）、古风场景、非卡通廉价感。〔待细化：场景设定集（时代 / 地域 / 核心视觉符号）。〕</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.4</span>静态分镜生成</h4>
+            <p class="lite"><b>工具</b>：GPT-Image-2（关键帧，复用 §3.3 视觉档案保同镜人物一致）。</p>
+            <p class="lite">逐镜生成，从钩子库选题 → 套脚本模板产出分镜脚本（前 3 秒钩子、剧末 CTA）；非卡通廉价感（唐宋明架空基调）。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.5</span>动态视频生成</h4>
+            <p class="lite"><b>工具</b>：SeeDance 2（图生视频 / 文生视频，口型同步，动作自然不抽搐）。</p>
+            <p class="lite">产出粗剪视频。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.6</span>剪辑配音后期（精修红线）</h4>
+            <p class="lite"><b>工具</b>：剪映 / CapCut（AI 配音 + 智能字幕 + 调色）。</p>
+            <p class="lite"><b>精修红线（任一不达标打回重做）</b>：画面（无脸崩 / 手指异常 / 廉价感）、节奏（前 3 秒钩子、≤60s、每 8–10s 情绪点）、声音（配音清晰、BGM 契合古风）、转化（剧末游戏钩子 + CTA 清晰）。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.7</span>成片发布（埋点）</h4>
+            <p class="lite"><b>平台</b>：抖音 / 视频号 / 小红书 / TikTok Minis（出海后）。</p>
+            <p class="lite"><b>游戏转化埋点（三处一致）</b>：评论区置顶 + 视频简介 + 剧内口播；分镜即埋钩（望月手撕反派时说"这店我开定了，配方在我手里"自然引导进游戏）、剧末卡点停在游戏可继续处、短剧角色游戏内 NPC 闭环。</p>
+            <p class="lite"><b>硬指标</b>：短剧→游 CTR ≥ 3%（低于触发 §3.8 黄灯）。周更 2–3 条（一 / 三 / 五发，周末复盘）。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">3.8</span>数据反馈（三色灯）</h4>
+            <p class="lite"><b>工具</b>：平台后台 + 飞书多维表格看板（CTR / 完播率 / 涨粉·自然量占比 / 进游注册数）。</p>
+            <p class="lite"><b>三色灯</b>：🟢 CTR≥3% 且完播≥基线 → 批量；🟡 1.5–3% 或完播低 → 限 1–2 条试验；🔴 <1.5% 连续 2 条（或单条<1%）→ 砍主题切储备（24h 内上线替换主题）。</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- 4 平台账号准备 -->
+      <details class="acc">
+        <summary><span class="pn">4</span>平台账号准备<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="note2">阶段一即应完成账号与事件埋点基线，否则后续验证看板填不出（见本页 <a class="doclink" data-jump="ppa" data-anchor="ppa-s5">项目方案概览 §5 验证指标体系</a>）。</div>
+          <div class="blk">
+            <h4><span class="bx">4.1</span>微信 / 抖音平台</h4>
+            <p class="lite">注册<b>微信小游戏 + 抖音小游戏</b>账号（见本页 <a class="doclink" data-jump="mvp" data-anchor="mvp-s12">MVP 设计文档 §1.2 关键交付</a> 清单）。团队具备 H5 / 小游戏<b>双平台（微信 / 抖音）上线运营到版号申报</b>完整闭环能力；前端成员有微信 / 抖音 / QQ / 快手等平台接入、SDK 与版本发布经验。事件埋点基线：注册双平台账号后，打通"注册 → 有效 → 次留 → 付费 → 短剧来源"全链路埋点。〔待细化：账号主体认证、类目选择、提审资料。〕</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">4.2</span>短剧平台</h4>
+            <p class="lite">注册 <b>抖音 / 视频号 / 小红书</b> 账号，作为 AI 短剧分发三平台（每条成片三处挂链一致）。出海换皮阶段补充 <b>TikTok</b>（TikTok Minis + 西 / 英语配音），为验证后启动事项。〔待细化：账号矩阵规划、认证 / 蓝 V、各平台内容合规边界。〕</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">4.3</span>AI 工具平台</h4>
+            <p class="lite"><b>AI 开发工具链</b>：OpenSpec / AI-Coding（规格驱动开发）；Claude Code 数值工具（配置检查 / 掉落模拟）。<b>AI 内容生产工具</b>：生图 / 图生视频 / 文生视频 / AI 配音（TTS）等短剧生产线工具。〔待细化：具体工具选型、账号与额度、私有化 / 云端部署策略。〕</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- 5 软著 & 版号版本准备 -->
+      <details class="acc">
+        <summary id="mvp-s5"><span class="pn">5</span>软著 & 版号版本准备<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="note2">团队具备版号申报落地能力（制作人 19 年全平台工业化经验 + 国风模拟经营赛道深度 + 版号申报实操），相关申报由制作人统筹，不单独设岗。以下为 MVP 阶段需并行预备的版本与资料基线。</div>
+          <div class="blk">
+            <h4><span class="bx">5.1</span>软著主体准备</h4>
+            <p class="lite">软著申请需明确<b>申请主体</b>（公司 / 工作室），主体资质与名称需在 MVP 阶段确认，避免后续更名导致的权属 / 申报返工。〔待细化：主体确认、经营范围与软著 / 版号申报资质匹配。〕</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">5.2</span>软著版本 & 资料</h4>
+            <p class="lite">软著需提交<b>可运行版本 + 源代码（前后各 30 页）+ 设计文档</b>。MVP 阶段产出的"可玩核心循环原型"即可作为软著素材来源；建议在原型首个可运行冻结点同步固化软著版本。〔待细化：软著版本冻结点、源代码提取与文档归档清单。〕</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">5.3</span>版号版本 & 资料</h4>
+            <p class="lite">版号申报资料含游戏自审、出版 / 运营单位对接等材料，申报节奏通常晚于 MVP，与长线盯数 / 买量放大阶段协同推进。团队已有版号申报能力可复用，MVP 阶段仅需预留版本与资料接口，不提前投入申报流程。〔待细化：版号申报节奏排期、出版单位合作、版本合规自查清单。〕</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- 附 验证闸门与待细化清单 -->
+      <details class="acc">
+        <summary><span class="pn">附</span>验证闸门与待细化清单<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="blk">
+            <h4><span class="bx">闸</span>验证闸门（MVP 阶段）</h4>
+            <p class="lite">MVP 阶段不设对外闸门，内部完成判据为"可玩、逻辑自洽、首片过审"。后续硬门槛（交叉引用）：有效次留硬门槛 ≥50%、买量 CPA≤5、LTV 成长曲线、红黄灯机制。权威源：完整指标、护栏与机制定义以本页 <a class="doclink" data-jump="ppa" data-anchor="ppa-s5">项目方案概览 §5 验证指标体系</a> 与 <a class="doclink" data-jump="ppa" data-anchor="ppa-s6">§6 里程碑路线图</a> 为权威源；短剧最终校验标准同为本页 §5 验证指标体系。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">待</span>待细化清单（下一步）</h4>
+            <div class="subgrid g2">
+              <div class="subcard"><div class="sd">· 合成链配方树（MVP 切片 5 条 + 目标态 4 类 20 链架构：输入 / 输出 / 解锁关 / 发射器行为）<br>· 5 关难度曲线<br>· 新手教学分步脚本（首屏 30s 留存）<br>· 美术符号 / 人设定稿（时代、视觉符号、7 人设；食魂 mascot）</div></div>
+              <div class="subcard"><div class="sd">· 变现嵌入具体时机与界面<br>· 一句话定位压缩版<br>· §4 平台账号：认证 / 类目 / 矩阵 / 合规边界<br>· §4.3 AI 工具：具体选型与额度<br>· §5 软著 / 版号：主体确认、版本冻结点、申报排期</div></div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- AI DEV -->
+    <section class="sec" id="ai-dev">
+      <h2>AI 开发流程助力</h2>
+      <div class="lead">AI 贯穿我们的"开发 + 获客"全链路 — 这是小队以少博大的核心杠杆。以下每条均有团队成员的实战验证。</div>
+      <div class="card">
+        <h3>规格驱动开发（SDD / OpenSpec）<span class="tag" style="background:#e9f7ef;color:#2b8a3e;font-size:.75em;padding:1px 6px;border-radius:4px;margin-left:6px">Markel + Nova 共同实践</span></h3>
+        <p class="mut">先写规格（spec）再实现，变更可追溯、需求可对照。核心循环的任何调整都先落 spec，避免"边做边改"的返工黑洞。<br><b>团队落地：</b>Markel 与 Nova 在游卡项目共同打磨并熟练应用 OpenSpec 工作流与 AI-Coding 工具链，将系统方案补全、上下文校对嵌入策划日常流程。</p>
+        <p class="lite" style="margin-top:10px"><b>OpenSpec 提案流程自定义（HYL-SDD 方法论）</b>：在通用 OpenSpec 生命周期之上，Markel 与 Nova 为模拟经营游戏共同定制了「5 步需求提案流水线」，把"先规格、后实现"落到每个功能变更上：</p>
+        <div class="pts" style="padding-left:18px!important;margin:2px 0 0!important">
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· <b>5 步流水线 + 权责分离</b>：需求(story)→规则(mechanics)→数值(params)→包装(theme)→交互(ux)，每步独立审阅（1 工作日 SLA）；7 个策划角色接力（PO / 制作人 / 主策 / 系统 / 数值 / 文案 / 交互）+ 技术 3 角色仅知会，人人可提议、非人人拍板。</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· <b>proposal-index 唯一状态机</b>：每个提案一份状态机文件，状态变更与产物更新为原子操作、每次流转即时更新；Git 同步 + AI 命令续接，多人接力不丢上下文。</div>
+          <div class="li" style="padding-left:1.3em!important;text-indent:-1.3em!important;margin-bottom:7px!important;font-size:13px!important;color:var(--txt)!important;line-height:1.62!important">· <b>变更即仪式（-fixNN）</b>：产物批准后冻结，修订须新建 -fixNN 版本、原稿锁定；级联规则抑制"悄悄漂移"，设计意图历史永远可恢复。</div>
+        </div>
+        <p class="lite" style="margin-top:8px">收益：需求歧义、规格漂移、空审批在流程层被系统性抑制；新成员约 30 分钟阅读即可覆盖 90% 上下文，团队交接成本极低。</p>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:16px">
+          <div style="padding:10px 12px;background:#f8faf9;border:1px solid #d8e8de;border-radius:10px">
+            <svg viewBox="0 0 680 106" width="100%" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img"><title>HYL-SDD 正常顺序流程</title><desc>5 步提案流水线：启动提案 → story → mechanics → params → theme → ux → 制作人终审，每步独立审阅</desc>
+              <defs><marker id="arG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+              <text x="12" y="15" font-size="10.5" font-weight="500" fill="#173404">① 自定义Proposal流程顺序（5步流水线 + 制作人终审）</text>
+              <g font-size="9.5" font-weight="500" text-anchor="middle">
+                <rect x="20" y="26" width="56" height="34" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".5"/><text x="48" y="42" fill="#173404">启动</text><text x="48" y="54" font-size="8" font-weight="400" fill="#3B6D11">提案</text>
+                <rect x="86" y="26" width="56" height="34" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".5"/><text x="114" y="42" fill="#173404">需求</text><text x="114" y="54" font-size="8" font-weight="400" fill="#3B6D11">story</text>
+                <rect x="152" y="26" width="56" height="34" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".5"/><text x="180" y="42" fill="#173404">规则</text><text x="180" y="54" font-size="8" font-weight="400" fill="#3B6D11">mech</text>
+                <rect x="218" y="26" width="56" height="34" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".5"/><text x="246" y="42" fill="#173404">数值</text><text x="246" y="54" font-size="8" font-weight="400" fill="#3B6D11">params</text>
+                <rect x="284" y="26" width="56" height="34" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".5"/><text x="312" y="42" fill="#173404">包装</text><text x="312" y="54" font-size="8" font-weight="400" fill="#3B6D11">theme</text>
+                <rect x="350" y="26" width="56" height="34" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".5"/><text x="378" y="42" fill="#173404">交互</text><text x="378" y="54" font-size="8" font-weight="400" fill="#3B6D11">ux</text>
+                <rect x="416" y="26" width="56" height="34" rx="6" fill="#C0DD97" stroke="#3B6D11" stroke-width=".5"/><text x="444" y="42" fill="#173404">终审</text><text x="444" y="54" font-size="8" font-weight="400" fill="#27500A">完成</text>
+              </g>
+              <g stroke="#3B6D11" stroke-width="1.1" fill="none" marker-end="url(#arG)">
+                <line x1="76" y1="43" x2="84" y2="43"/><line x1="142" y1="43" x2="150" y2="43"/><line x1="208" y1="43" x2="216" y2="43"/><line x1="274" y1="43" x2="282" y2="43"/><line x1="340" y1="43" x2="348" y2="43"/><line x1="406" y1="43" x2="414" y2="43"/>
+              </g>
+              <g fill="#C0DD97" stroke="#3B6D11" stroke-width=".5">
+                <circle cx="80" cy="43" r="8"/><text x="80" y="46" font-size="8" text-anchor="middle" fill="#27500A">审</text>
+                <circle cx="146" cy="43" r="8"/><text x="146" y="46" font-size="8" text-anchor="middle" fill="#27500A">审</text>
+                <circle cx="212" cy="43" r="8"/><text x="212" y="46" font-size="8" text-anchor="middle" fill="#27500A">审</text>
+                <circle cx="278" cy="43" r="8"/><text x="278" y="46" font-size="8" text-anchor="middle" fill="#27500A">审</text>
+                <circle cx="344" cy="43" r="8"/><text x="344" y="46" font-size="8" text-anchor="middle" fill="#27500A">审</text>
+                <circle cx="410" cy="43" r="8"/><text x="410" y="46" font-size="8" text-anchor="middle" fill="#27500A">审</text>
+              </g>
+              <text x="12" y="80" font-size="9" fill="#5F5E5A">&#9679; 每步审阅时限 1 工作日 &#183; 审阅通过后产物冻结 &#183; 全部通过后进入 design 阶段</text>
+            </svg>
+          </div>
+          <div style="padding:10px 12px;background:#fdf8f4;border:1px solid #f0d8c0;border-radius:10px">
+            <svg viewBox="0 0 680 294" width="100%" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" role="img"><title>HYL-SDD 级联修订流程</title><desc>级联修订：创建-fixNN → 从问题步骤重启 → 判定后续步骤状态(已通过则级联建fix / 未审阅则直接改) → 重走 → 终审</desc>
+              <defs>
+                <marker id="arR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#993C1D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+              </defs>
+              <text x="12" y="14" font-size="10.5" font-weight="500" fill="#4A1B0C">② 自定义Proposal修订流程（-fixNN仪式 + 级联规则）</text>
+              <rect x="205" y="22" width="270" height="24" rx="12" fill="#F5C4B3" stroke="#D85A30" stroke-width=".5"/>
+              <text x="340" y="39" font-size="9.5" font-weight="500" text-anchor="middle" fill="#712B13">后续步骤发现前置产物需修订</text>
+              <line x1="340" y1="46" x2="340" y2="54" stroke="#993C1D" stroke-width="1.1" marker-end="url(#arR)"/>
+              <rect x="255" y="54" width="170" height="30" rx="6" fill="#FAECE7" stroke="#D85A30" stroke-width=".5"/>
+              <text x="340" y="72" font-size="9.5" font-weight="500" text-anchor="middle" fill="#712B13">创建 -fixNN.md</text>
+              <text x="340" y="82" font-size="8" font-weight="400" text-anchor="middle" fill="#993C1D">原稿锁定 · 保留原文件</text>
+              <line x1="340" y1="84" x2="340" y2="92" stroke="#993C1D" stroke-width="1.1" marker-end="url(#arR)"/>
+              <rect x="255" y="92" width="170" height="30" rx="6" fill="#FAECE7" stroke="#D85A30" stroke-width=".5"/>
+              <text x="340" y="110" font-size="9.5" font-weight="500" text-anchor="middle" fill="#712B13">从问题步骤重启</text>
+              <text x="340" y="120" font-size="8" font-weight="400" text-anchor="middle" fill="#993C1D">按序重走后续步骤</text>
+              <line x1="340" y1="122" x2="340" y2="130" stroke="#993C1D" stroke-width="1.1" marker-end="url(#arR)"/>
+              <path d="M340,130 L382,150 L340,170 L298,150 Z" fill="#FAEEDA" stroke="#BA7517" stroke-width=".5"/>
+              <text x="340" y="147" font-size="9" font-weight="500" text-anchor="middle" fill="#633806">后续步骤</text>
+              <text x="340" y="159" font-size="9" font-weight="500" text-anchor="middle" fill="#633806">当前状态?</text>
+              <g stroke="#993C1D" stroke-width="1.1" fill="none" marker-end="url(#arR)">
+                <polyline points="298,150 135,150 135,196"/>
+                <polyline points="382,150 545,150 545,196"/>
+              </g>
+              <text x="215" y="144" font-size="9" fill="#993C1D" text-anchor="middle">已审阅通过</text>
+              <text x="465" y="144" font-size="9" fill="#993C1D" text-anchor="middle">未提交审阅</text>
+              <g font-size="9.5" font-weight="500" text-anchor="middle">
+                <rect x="40" y="196" width="190" height="36" rx="6" fill="#FAECE7" stroke="#D85A30" stroke-width=".5"/>
+                <text x="135" y="214" fill="#712B13">已通过 → 必须建 -fix</text>
+                <text x="135" y="226" font-size="8" font-weight="400" fill="#993C1D">级联：params 已通过 → params-fix01</text>
+                <rect x="450" y="196" width="190" height="36" rx="6" fill="#FAECE7" stroke="#D85A30" stroke-width=".5"/>
+                <text x="545" y="214" fill="#712B13">未审阅 → 直接改原稿</text>
+                <text x="545" y="226" font-size="8" font-weight="400" fill="#993C1D">撰写中 / 待审阅 → 不建 -fix</text>
+              </g>
+              <!-- 肘形汇合箭头（左/右各一）-->
+              <g stroke="#993C1D" stroke-width="1.1" fill="none" marker-end="url(#arR)">
+                <polyline points="135,232 135,244 295,244 295,254"/>
+                <polyline points="545,232 545,244 385,244 385,254"/>
+              </g>
+              <rect x="250" y="254" width="180" height="28" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".5"/>
+              <text x="340" y="271" font-size="9.5" font-weight="500" text-anchor="middle" fill="#173404">回归正常流 · 终审 → 完成</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>AI 数值工具链<span class="tag" style="background:#e9f7ef;color:#2b8a3e;font-size:.75em;padding:1px 6px;border-radius:4px;margin-left:6px">DKW 实践</span></h3>
+        <p class="mut">核心循环逻辑（合成判定、关卡解锁、经济数值）测试先行，保证薄产品迭代时不破坏已验证的留存结构。<br><b>团队落地：</b>DKW 基于 Claude Code 开发配置检查 / 掉落模拟等自动化效率工具，将数值调优从"手工试错"升级为"可重复验证的模拟闭环"，线上调优周期大幅缩短。</p>
+      </div>
+      <div class="card">
+        <h3>AIGC 美术工作流<span class="tag" style="background:#f3ebfb;color:#6f42c1;font-size:.75em;padding:1px 6px;border-radius:4px;margin-left:6px">ZQ 实践</span></h3>
+        <div class="flow">
+          <div class="step"><div class="sn">STEP 1</div><div class="st">概念图</div></div>
+          <div class="step"><div class="sn">STEP 2</div><div class="st">资产生成</div></div>
+          <div class="step"><div class="sn">STEP 3</div><div class="st">精修流水线</div></div>
+          <div class="step"><div class="sn">STEP 4</div><div class="st">一致性控制</div></div>
+        </div>
+        <p class="mut">食魂 mascot 等关键角色固定 seed + 参考图存档，确保跨短剧/游戏人设一致；换皮时仅改美术皮、骨架零改动。<br><b>团队落地：</b>ZQ 以 Gemini / GPT 驱动角色原画从概念→资产生成→精修的全流水线，二次元/欧美卡通/国风多风格均已在实际项目中跑通，同时管理 5+ 外包团队的 AIGC 协作规范。</p>
+      </div>
+      <div class="card">
+        <h3>AI 策划 + UI 落地工作流<span class="tag" style="background:#e9f7ef;color:#2b8a3e;font-size:.75em;padding:1px 6px;border-radius:4px;margin-left:6px">YYT 实践</span></h3>
+        <p class="mut">策划方案不再从零手写— AI 辅助完成系统方案补全、文档润色、上下文校对；UI 不再反复切图对齐— 智能体预处理界面框架与素材，程序 FGUI 拼制效率翻倍。<br><b>团队落地：</b>YYT 在游卡女性向模拟经营项目两次重构中全程使用该工作流，迭代期间无重大功能/界面 BUG，如期进入上线筹备阶段。这是小队"策划→美术→程序"协作链中 AI 渗透最深的环节之一。</p>
+      </div>
+      <div class="note">
+        <b style="color:var(--text)">AI 团队覆盖矩阵</b>（4/6 成员已落地 AI 工具链实战）：
+        <table style="width:100%;margin-top:8px;font-size:.88em;border-collapse:collapse">
+          <tr style="background:var(--muted);font-weight:600">
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">成员</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">岗位</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">AI 工具链</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">实战场景</td>
+          </tr>
+          <tr>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-weight:600;color:var(--accent)">Nova</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">主策划</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">AIGC &amp; AI-Coding / OpenSpec</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">系统方案补全、辅助设计工具开发</td>
+          </tr>
+          <tr>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-weight:600;color:var(--accent)">DKW</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">数值策划</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">Claude Code / Excel/VBA</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">配置检查、掉落模拟、数值调优</td>
+          </tr>
+          <tr>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-weight:600;color:var(--accent)">ZQ</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">2D主美</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">Gemini / GPT AIGC</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">角色原画概念→生成→精修全流水线</td>
+          </tr>
+          <tr>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-weight:600;color:var(--accent)">YYT</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">交互策划</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">AI 策划工作流 / 智能体 UI 切图</td>
+            <td style="padding:4px 8px;border-bottom:1px solid var(--border)">方案补全+校对+润色、FGUI 框架预处理</td>
+          </tr>
+        </table>
+        <p style="margin-top:10px;color:var(--text-muted)">AI 不是替代人，是放大人的杠杆。4 名成员覆盖策划×数值×美术×交互四个维度，形成完整的 AI 辅助开发闭环。</p>
+      </div>
+    </section>
+
+    <!-- AI DRAMA -->
+    <section class="sec" id="ai-drama">
+      <h2>AI 短剧制作 SOP</h2>
+      <div class="lead">可复用的内容获客生产线 — 阶段②引流验证、阶段⑤换皮出海共同依赖的核心资产。本页自包含，完整呈现 8 步流水线、大女主创作圣经、精修红线、三色灯与第 1 条脚本示例；权威硬指标以本页 <a class="doclink" data-jump="ppa" data-anchor="ppa-s5">项目方案概览 §5 验证指标体系</a> 为源。</div>
+
+      <style>
+        #ai-drama{font-size:15px}
+        #ai-drama .acc>summary{font-size:18px}
+        #ai-drama .blk h4{font-size:16px}
+        #ai-drama .lite{font-size:13px;line-height:1.75}
+        #ai-drama .cap{font-size:12.5px}
+        #ai-drama .note2{font-size:13px;padding:10px 14px}
+        #ai-drama .accbody{padding-top:6px}
+        #ai-drama .data-table{font-size:13.5px}
+        #ai-drama .data-table th,#ai-drama .data-table td{padding:9px 11px;font-size:13px}
+        #ai-drama pre.prompt{background:#1e2433;color:#e6edf3;font-size:12px;line-height:1.6;padding:10px 12px;border-radius:8px;white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,Consolas,monospace;margin:6px 0}
+      </style>
+
+      <div class="card">
+        <h3>八步生产流水线（每步含工具）</h3>
+        <div class="flow">
+          <div class="step"><div class="sn">1</div><div class="st">剧本选题<br><span class="tool">多维表格+LLM</span></div></div>
+          <div class="step"><div class="sn">2</div><div class="st">剧情脚本<br><span class="tool">GPT-5</span></div></div>
+          <div class="step"><div class="sn">3</div><div class="st">角色&场景<br><span class="tool">GPT-Image-2</span></div></div>
+          <div class="step"><div class="sn">4</div><div class="st">静态分镜<br><span class="tool">GPT-Image-2</span></div></div>
+          <div class="step"><div class="sn">5</div><div class="st">动态视频<br><span class="tool">SeeDance 2</span></div></div>
+          <div class="step"><div class="sn">6</div><div class="st">剪辑配音后期<br><span class="tool">剪映/CapCut</span></div></div>
+          <div class="step"><div class="sn">7</div><div class="st">成片发布<br><span class="tool">抖音/视频号</span></div></div>
+          <div class="step"><div class="sn">8</div><div class="st">数据反馈<br><span class="tool">三色灯</span></div></div>
+        </div>
+        <p class="mut" style="margin-top:8px">对外产出：抖音 / 视频号 / 小红书 / TikTok Minis 的剧情向短剧（每周 2–3 条）。对内产出：可被游戏复用的剧情钩子（驱动次日回流）、角色人设（游戏内 NPC）。关键纪律：每条短剧在<b>分镜阶段就埋好游戏钩子</b>，不是成片后硬贴链接。</p>
+      </div>
+
+      <!-- 0 创作圣经 -->
+      <details class="acc" open>
+        <summary><span class="pn">0</span>大女主创作圣经（统一世界观）<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <p class="lite">全剧以<b>苏望月</b>为唯一核心驱动者：她搞事业、她手撕反派、她独美——<b>不靠男主救、不恋爱脑</b>。所有母题、角色、分镜都服务于"女主逆袭 + 古风餐厅经营"。换皮出海时仅替换文化外壳（中世纪女厨 / 酒馆主），大女主内核 100% 复用。</p>
+          <p class="lite"><b>世界观</b>：融合唐宋明的架空古风，以"餐厅里的人和事"为叙事容器。名厨之女苏望月被继母与渣未婚夫陷害、逐出家族、夺走祖传食坊 → 接手濒临倒闭的破店（望月食坊前身）→ 凭厨艺 + 经营脑重振 → 手撕仇家、做成第一食坊。</p>
+          <p class="lite"><b>女主弧光（五拍）</b>：① 被逐立誓（破店雨夜）② 一道菜立威（失传菜惊艳全城）③ 手撕反派（继母 / 渣男 / 同行砸场反杀）④ 经营破局（资金链 / 打压危机）⑤ 独美登顶（破店→第一食坊，不婚独美）。</p>
+          <p class="lite"><b>反派 ensemble</b>：赵氏（继母·恶毒女配）、陆三郎（退婚渣男）、金满楼掌柜（同行打压）。<b>伙伴</b>：小满（学徒厨娘·迷妹）、老顾（退休名厨·合成解锁）、食魂（合成 mascot）。</p>
+        </div>
+      </details>
+
+      <!-- 1 选题 -->
+      <details class="acc">
+        <summary><span class="pn">1</span>剧本选题：主题库 + 钩子库<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="blk">
+            <h4><span class="bx">1.1</span>工具与主题储备</h4>
+            <p class="lite"><b>工具</b>：飞书多维表格 / Notion（主题×钩子双表，字段含母题 / 钩子类型 / 目标 CTR / 映射游戏节点 / 状态）+ 对话式大模型（GPT-5 / Claude / Kimi）扩写钩子。</p>
+            <p class="lite"><b>主题储备纪律</b>：主投「大女主古风餐厅逆袭」；常备 ≥2 套备用主题（含换皮出海「中世纪女厨酒馆逆袭」），红灯触发 24h 内切换不空档。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">1.2</span>双层钩子库 + 五大母题</h4>
+            <p class="lite"><b>通用钩子</b>（跨主题复用）：打脸爽点 / 逆袭高光 / 公平反击 / 独立清醒 / 悬念卡点。<b>特定钩子</b>（按母题绑定游戏节点）：</p>
+            <table class="data-table">
+              <thead><tr><th>母题</th><th>大女主题材（特定钩子）</th><th>游戏内解锁</th></tr></thead>
+              <tbody>
+                <tr><td>① 厨艺打脸</td><td>用一道失传菜让渣男 / 恶毒女配 / 势利眼闭嘴</td><td>合成链解锁</td></tr>
+                <tr><td>② 身世逆袭</td><td>被逐真相、祖传食谱秘方、归来</td><td>主线剧情节点</td></tr>
+                <tr><td>③ 经营危机</td><td>退租 / 资金断 / 同行打压 → 女主经营脑化解</td><td>经营数值事件</td></tr>
+                <tr><td>④ 合成彩蛋</td><td>食谱第三页 / 失传配方 → 游戏合成玩法</td><td>合成玩法入口</td></tr>
+                <tr><td>⑤ 高光节日</td><td>花朝 / 中秋宴 → 女主高光、手撕名场面</td><td>节日限定活动</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+
+      <!-- 2 脚本 -->
+      <details class="acc">
+        <summary><span class="pn">2</span>剧情脚本：分镜细化<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="blk">
+            <h4><span class="bx">2.1</span>工具与格式铁律</h4>
+            <p class="lite"><b>工具</b>：GPT-5（备选 Claude / Kimi）+ 结构化分镜模板。Prompt 要点：「你是古风大女主短剧编剧，严格遵循苏望月主导、不恋爱脑红线，按分镜表格式输出 N 镜，钩子前置，剧末给游戏 CTA」。</p>
+            <p class="lite"><b>结构铁律</b>：每条 ≤60s，前 3 秒有钩子、剧末 CTA 清晰；钩子前置（镜 1–3）、情绪中段、悬念卡点收尾（剧末 = 游戏入口）。<b>大女主红线</b>：女主须为行动发起者，禁"等男主救 / 恋爱脑"；游戏钩子栏分镜阶段必填。</p>
+          </div>
+          <div class="blk">
+            <h4><span class="bx">2.2</span>分镜模板（大女主开场示范）</h4>
+            <table class="data-table">
+              <thead><tr><th>镜号</th><th>景别</th><th>画面描述</th><th>台词 / 旁白</th><th>时长</th><th>音效 / BGM</th><th>游戏钩子</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>全景</td><td>破败食坊，雨夜，望月立门前</td><td>旁白："被赶出苏家那夜，他们说我这辈子开不了店"</td><td>3s</td><td>雨声+古筝</td><td>无</td></tr>
+                <tr><td>2</td><td>特写</td><td>退婚书掷地，陆三郎冷笑离场</td><td>"陆三郎说，落魄女不配当他妇"</td><td>4s</td><td>纸声</td><td>无</td></tr>
+                <tr><td>3</td><td>中景</td><td>望月擦灶台，眼神凌厉</td><td>"那我就开给你们看——望月食坊，今晚开张"</td><td>5s</td><td>点火声</td><td>女主立誓=主线起点</td></tr>
+                <tr><td>4</td><td>特写</td><td>一锅失传"望月羹"起锅，金光</td><td>"这道菜，苏家失传十年"</td><td>5s</td><td>滋滋声</td><td>食谱=合成入口</td></tr>
+                <tr><td>5</td><td>中景</td><td>赵氏带人砸场，望月举勺挡</td><td>"我的店，轮不到你撒野"</td><td>6s</td><td>碎瓷声</td><td>角色客串→进游戏</td></tr>
+                <tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+                <tr><td>N</td><td>卡点</td><td>望月背影，店招牌亮</td><td>"想知道我把破店做成第一食坊？来游戏里开"</td><td>2s</td><td>鼓点骤停</td><td>CTA：评论区/简介链</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+
+      <!-- 3 角色&场景 -->
+      <details class="acc">
+        <summary><span class="pn">3</span>角色 & 场景设定（GPT-Image-2）<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <p class="lite"><b>工具</b>：GPT-Image-2（角色卡 + 场景概念图），固定 seed + 参考图保一致性，建立「角色视觉档案」（每人 1 张主卡 + 表情 / 姿态变体）。</p>
+          <table class="data-table">
+            <thead><tr><th>角色</th><th>定位</th><th>性格钩子</th><th>游戏内复用</th><th>生图提示要点</th></tr></thead>
+            <tbody>
+              <tr><td><b>苏望月</b></td><td>大女主·食坊主理</td><td>清醒独立、事业脑、毒舌护短</td><td>玩家化身 / 主线 NPC</td><td>唐宋明古风、利落束发、灶台前凌厉眼神</td></tr>
+              <tr><td>赵氏</td><td>反派·继母</td><td>夺产散谣、笑里藏刀</td><td>剧情反派节点</td><td>华服、假笑、权贵气场</td></tr>
+              <tr><td>陆三郎</td><td>反派·退婚渣男</td><td>嫌贫爱富、悔婚打脸</td><td>支线打脸事件</td><td>纨绔锦衣、倨傲</td></tr>
+              <tr><td>金满楼掌柜</td><td>反派·同行打压</td><td>势利眼、抢食材砸场</td><td>经营危机事件</td><td>富态、市侩</td></tr>
+              <tr><td>小满</td><td>伙伴·学徒厨娘</td><td>头号迷妹、笨拙可爱</td><td>新手教学陪伴</td><td>圆脸、围裙、雀跃</td></tr>
+              <tr><td>老顾</td><td>伙伴·退休名厨</td><td>认可女主、授秘技</td><td>合成链解锁者</td><td>白发、沉稳、灶王气场</td></tr>
+              <tr><td>食魂</td><td>古旧食谱精灵</td><td>合成彩蛋载体</td><td>合成玩法 mascot</td><td>半透明古卷精灵、发光</td></tr>
+            </tbody>
+          </table>
+          <p class="lite"><b>场景概念图</b>：望月食坊（破店→修缮后）、苏家大宅、市井街巷、花朝 / 中秋宴席——均按唐宋明架空基调出图。</p>
+        </div>
+      </details>
+
+      <!-- 4 静态分镜 -->
+      <details class="acc">
+        <summary><span class="pn">4</span>静态分镜生成（GPT-Image-2）<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <p class="lite"><b>工具</b>：GPT-Image-2（关键帧，复用 §3 视觉档案保同镜人物一致）。</p>
+          <p class="lite">逐镜调用：prompt 含景别 + 动作 + 古风质感 + 角色参考图；同一角色跨镜必须引用 §3 视觉档案的 seed / 参考图，杜绝换镜变脸。拒绝塑料感高光、扁平色块。产出每条一套关键帧（PNG），命名 `镜号_描述`。</p>
+        </div>
+      </details>
+
+      <!-- 5 动态视频 -->
+      <details class="acc">
+        <summary><span class="pn">5</span>动态视频生成（SeeDance 2）<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <p class="lite"><b>工具</b>：SeeDance 2（图生视频 / 文生视频，口型同步，动作自然不抽搐）。</p>
+          <p class="lite">逐镜图生视频，控制镜头运动幅度（古风稳重，避免乱飞）；对白镜绑定配音音轨做口型对齐。产出粗剪视频流转剪辑环节。</p>
+        </div>
+      </details>
+
+      <!-- 6 剪辑配音 -->
+      <details class="acc">
+        <summary><span class="pn">6</span>剪辑配音后期（精修红线）<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <p class="lite"><b>工具</b>：剪映专业版 / CapCut（AI 配音、智能字幕、一键调色、古风模板）。</p>
+          <p class="lite"><b>精修红线（任一不达标打回重做）</b>：画面（无 AI 脸崩 / 手指异常 / 肢体扭曲；古风质感、色调统一不跳帧）；节奏（前 3 秒钩子、≤60s、每 8–10s 情绪点）；声音（配音清晰、BGM 契合古风）；转化（剧末明确游戏钩子 + CTA 清晰）。</p>
+        </div>
+      </details>
+
+      <!-- 7 成片发布 -->
+      <details class="acc">
+        <summary><span class="pn">7</span>成片发布（游戏转化埋点）<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <p class="lite"><b>平台</b>：抖音 / 视频号 / 小红书 / TikTok Minis（出海验证后）。</p>
+          <p class="lite"><b>埋钩挂链三处一致</b>：评论区置顶 + 视频简介 + 剧内口播。分镜即埋钩（望月手撕反派时说"这店我开定了，配方在我手里"自然引导进游戏）；剧末卡点停在游戏可继续处（"食谱第三页写了什么？来望月食坊看"）；短剧角色游戏内 NPC 闭环。周更 2–3 条（一 / 三 / 五发，周末复盘）。</p>
+          <p class="lite"><b>硬指标</b>：短剧→游 CTR <b>≥ 3%</b>（低于触发 §8 黄灯）。</p>
+        </div>
+      </details>
+
+      <!-- 8 数据反馈 -->
+      <details class="acc">
+        <summary><span class="pn">8</span>数据反馈：三色灯<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <p class="lite"><b>工具</b>：平台原生后台 + 飞书多维表格看板（CTR / 完播率 / 涨粉·自然量占比 / 进游注册数 四列 + 条件格式自动三色灯）。</p>
+          <table class="data-table">
+            <thead><tr><th>灯</th><th>判定阈值</th><th>动作</th></tr></thead>
+            <tbody>
+              <tr><td>🟢 绿灯</td><td>CTR ≥ 3% 且 完播率 ≥ 基线（如 35%）</td><td>该主题 / 钩子进"可批量"队列，提升周更占比</td></tr>
+              <tr><td>🟡 黄灯</td><td>CTR 1.5%–3% 或 完播率低于基线</td><td>保留但限 1–2 条试验，换钩子角度 / 前3秒 / 封面 / CTA</td></tr>
+              <tr><td>🔴 红灯</td><td>CTR < 1.5% 连续 2 条（同主题）；或单条 < 1%</td><td>立即砍掉该主题剧本，从 §1 储备库切换下一套</td></tr>
+            </tbody>
+          </table>
+          <p class="lite"><b>快速更换纪律</b>：储备库常备 ≥2 套备用主题，红灯 24h 内上线替换主题第 1 条；不恋战、不补拍、不解释。周复盘：绿灯钩子反哺钩子库，红灯主题标记淘汰。</p>
+        </div>
+      </details>
+
+      <div class="grid2">
+        <div class="card"><h3>换皮复用</h3><p class="mut">国内→海外中世纪，90% 资产零改动，仅重拍短剧 + 换皮美术。内容引擎是验证后出海的最大杠杆。结构 / 模板 / 8 步流水线 / 精修红线不变；短剧重拍（西方中世纪审美 / 面孔 / 语种）；美术皮「望月食坊」↔「豆豆眼餐馆 The Dot-Eyed Tavern」。</p></div>
+        <div class="card"><h3>交付与验收（阶段 1）</h3><p class="mut">三件套：① 可玩核心循环原型 ② 第 1 条 AI 短剧成片过审（过 §6 红线）③ 本 SOP 文档。验收：首条成片跑出可读完播率与短剧→游 CTR 初始数据，即引擎跑通，进入阶段 2（3 日+ 版本引流验证）。</p></div>
+      </div>
+
+      <!-- 示例① -->
+      <details class="acc">
+        <summary><span class="pn">★</span>示例① · 第 1 条脚本《第三页的食谱》<span class="ar">▶</span></summary>
+        <div class="accbody">
+          <div class="note2">状态：阶段 1 交付物②（成片）脚本基础 ｜ 套用标准：SOP §2 脚本模板（大女主分镜）｜ 时长：约 42s（≤60s）｜ 钩子：母题④ 合成彩蛋 ｜ 映射：合成玩法入口。</div>
+
+          <div class="blk">
+            <h4><span class="bx">主</span>剧情主题</h4>
+            <p class="lite"><b>主题定位</b>：母题④ 合成彩蛋——女主翻出娘留食谱，前两页写满、第三页空白藏食魂，引出"合成"核心玩法。<b>情绪核心</b>：好奇 + 惊喜 + 掌控感。<b>为何选它</b>：直接演示"合成"机制，是最强游戏承接钩子。</p>
+            <p class="lite"><b>选题卡</b>：本次主题 = 大女主古风逆袭·母题④；钩子类型 = 特定（绑定游戏节点）；目标 CTR ≥ 3%；目标完播率基线 ≥ 35%；映射游戏节点 = 合成玩法入口；人设出场 = 苏望月 / 小满 / 食魂。</p>
+          </div>
+
+          <div class="blk">
+            <h4><span class="bx">角</span>主要角色 & 场景设定（含 GPT-Image-2 提示词）</h4>
+            <p class="lite"><b>统一风格前缀（所有提示词共用）</b>：古风游戏美术，唐宋明融合架空时代，Q 版 2.5~3 头身微写实，豆豆眼，柔和古风水彩质感，暖色调，无文字、无边框。</p>
+            <table class="data-table">
+              <thead><tr><th>角色 / 场景</th><th>定位</th><th>本集</th><th>游戏内复用</th></tr></thead>
+              <tbody>
+                <tr><td><b>苏望月</b></td><td>大女主·食坊主理</td><td>✅ 主视角</td><td>玩家化身 / 主线 NPC</td></tr>
+                <tr><td>小满</td><td>学徒厨娘（迷妹）</td><td>✅ 客串</td><td>新手教学陪伴</td></tr>
+                <tr><td>食魂</td><td>古旧食谱精灵（mascot）</td><td>✅ 登场</td><td>合成玩法 mascot</td></tr>
+              </tbody>
+            </table>
+            <p class="lite"><b>GPT-Image-2 提示词（可直接交付生图）</b>：</p>
+            <pre class="prompt">角色卡 · 苏望月（主卡）
+古风游戏角色立绘，唐宋明融合架空时代，苏望月，二十余岁女性，利落高束发，素色厨娘短打与围裙，手持铸铁锅勺，眼神凌厉清醒，灶台前微侧身，2.5 头身 Q 版微写实，豆豆眼，柔和古风水彩质感，暖色调，无文字无边框 --seed 20240701 --ref 苏望月参考图</pre>
+            <pre class="prompt">角色卡 · 小满（学徒迷妹）
+古风游戏角色立绘，唐宋明融合架空时代，小满，少女，圆脸雀斑，双丫髻，浅色学徒围裙，双手捧汤碗，眼神雀跃崇拜，2.5 头身 Q 版微写实，豆豆眼，柔和古风水彩质感，暖色调，无文字无边框 --seed 20240702 --ref 小满参考图</pre>
+            <pre class="prompt">角色卡 · 食魂（合成 mascot）
+古风游戏角色设定，食魂，半透明古卷精灵，由金色食谱书页凝聚，发光柔光，圆润可爱豆豆眼，飘浮姿态，唐宋明符文点缀，2.5 头身 Q 版微写实，古风水彩质感，金暖色调，无文字无边框 --seed 20240703 --ref 食魂参考图</pre>
+            <pre class="prompt">场景 · 望月食坊（破店·雨夜）
+古风餐厅内景，唐宋明融合架空，破败食坊，雨夜，木质灶台积灰，残破招牌"望月食坊"摇摇欲坠，暖黄灯火，湿漉石地反光，孤寂但温暖，2.5 头身 Q 版微写实场景，古风水彩质感，冷蓝暖黄对比，无文字无边框 --seed 20240801 --ref 食坊参考图</pre>
+            <pre class="prompt">场景 · 望月食坊（修缮后·夜）
+古风餐厅内景，唐宋明融合架空，修缮后食坊，整洁木灶与暖光灯笼，招牌"望月食坊"明亮，灶火正旺，温馨红火，2.5 头身 Q 版微写实场景，古风水彩质感，暖金色调，无文字无边框 --seed 20240802 --ref 食坊参考图</pre>
+            <pre class="prompt">场景 · 食谱第三页（金光空白）
+特写，古旧食谱书册摊开，前两页画满菜式墨稿，第三页空白泛金光，唐宋明工笔质感，悬浮金粉粒子，神秘温暖，2.5 头身 Q 版微写实风格统一，古风水彩质感，金暖色调，无文字无边框 --seed 20240803 --ref 食谱参考图</pre>
+            <p class="lite"><b>一致性纪律</b>：同角色跨镜必须引用同一 --seed 与 --ref；换皮出海仅替换文化外壳，大女主内核与提示词骨架 100% 复用。</p>
+          </div>
+
+          <div class="blk">
+            <h4><span class="bx">幕</span>第一幕脚本（分镜 · SOP §2 格式）</h4>
+            <p class="lite">本 42s 短剧为苏望月弧光<b>第一幕</b>：被逐立誓 → 翻出娘留食谱 → 食魂登场解谜 → 合成演示。钩子前置（镜 1–3）、情绪中段、悬念卡点收尾（剧末 = 游戏入口）。</p>
+            <table class="data-table">
+              <thead><tr><th>镜</th><th>景别</th><th>画面描述</th><th>台词 / 旁白</th><th>时长</th><th>游戏钩子</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>全景</td><td>望月食坊修缮后夜景，招牌亮，苏望月独站灶前</td><td>旁白："被赶出苏家那夜，我说这辈子要开自己的店"</td><td>3s</td><td>女主立誓=主线起点</td></tr>
+                <tr><td>2</td><td>中景</td><td>苏望月翻出蒙尘旧食谱（娘留下），吹开灰</td><td>"这本食谱，是娘留下的。"</td><td>4s</td><td>旧食谱=游戏道具</td></tr>
+                <tr><td>3</td><td>特写</td><td>前两页画满菜式，第三页空白泛金光</td><td>"前两页写满了，第三页……是空的。"</td><td>3s</td><td>第三页=合成入口</td></tr>
+                <tr><td>4</td><td>全景</td><td>金粉升起，凝成食魂</td><td>食魂："终于有人翻到我啦～"</td><td>4s</td><td>食魂=合成 mascot</td></tr>
+                <tr><td>5</td><td>中景</td><td>食魂飘到肩头介绍自己</td><td>"第三页的菜，得用'合成'才能写出来。"</td><td>5s</td><td>引入"合成"玩法</td></tr>
+                <tr><td>6</td><td>中景</td><td>小满端汤入画，迷妹脸</td><td>小满："这精灵说的新菜……" 望月："我来学。"</td><td>5s</td><td>角色客串引导</td></tr>
+                <tr><td>7</td><td>特写</td><td>食魂掌心浮现两样食材，合并发光成新菜</td><td>"把食材合在一起，就能生出第三页的菜。"</td><td>6s</td><td>演示合成机制</td></tr>
+                <tr><td>8</td><td>中景</td><td>望月接住新菜，眼神笃定转向镜头</td><td>"这第三页，我来填。"</td><td>5s</td><td>CTA：进游戏</td></tr>
+                <tr><td>9</td><td>卡点</td><td>第三页空白定格，浮出"望月食坊"</td><td>旁白："第三页写了什么？来望月食坊看。"</td><td>2s</td><td>评论区/简介挂链</td></tr>
+              </tbody>
+            </table>
+            <p class="lite"><b>大女主红线复核</b>：女主是行动发起者（翻食谱 / 学合成 / 说"我来填"），小满不抢戏、食魂为辅助 mascot，无男主救场。</p>
+          </div>
+
+          <div class="blk">
+            <h4><span class="bx">产</span>生产备注（SOP 步③–⑧）</h4>
+            <p class="lite">步③/④ GPT-Image-2：三角色固定参考图 + seed，过 §6 红线。步⑤ SeeDance 2：逐镜图生视频，对白镜（4/5/6/7/8）绑定配音做口型对齐。步⑥ 剪映/CapCut AI 配音：望月=清冷成熟女声、食魂=清亮少年音、小满=灵动迷妹音；过古风审美红线（脸崩/手指异常/跳帧打回）。步⑦ 三处挂链一致，食魂/望月游戏内 NPC 闭环。步⑧ 三色灯：CTR≥3% 绿灯进批量；&lt;1.5% 连续 2 条砍主题、24h 内切储备库下一套。验收：首条成片跑出 CTR 初始数据即引擎跑通，进入阶段 2。</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+  </main>
+</div>
+
+<div class="lb-overlay" id="lbOverlay">
+  <span class="lb-close" onclick="closeLB()">×</span>
+  <img id="lbImg" src="" alt="放大查看">
+</div>
+
+<script>
+  const nav = document.getElementById('nav');
+  const links = nav.querySelectorAll('a');
+  const secs = document.querySelectorAll('.sec');
+  links.forEach(a=>{
+    a.addEventListener('click',()=>{
+      links.forEach(x=>x.classList.remove('active'));
+      a.classList.add('active');
+      const id=a.dataset.s;
+      secs.forEach(s=>s.classList.toggle('show',s.id===id));
+      document.querySelector('.main').scrollTo({top:0});
+    });
+  });
+
+  const lb=document.getElementById('lbOverlay');
+  const lbImg=document.getElementById('lbImg');
+  function openLB(src){lbImg.src=src;lb.classList.add('open');}
+  function closeLB(){lb.classList.remove('open');lbImg.src='';}
+  lb.addEventListener('click',e=>{if(e.target!==lbImg)closeLB();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLB();});
+
+  // 页内跳转：仅指向本页 section，不援引外部文档
+  document.querySelectorAll('[data-jump]').forEach(el=>{
+    el.addEventListener('click',e=>{
+      e.preventDefault();
+      const id=el.dataset.jump;
+      const target=document.getElementById(id);
+      if(!target) return;
+      links.forEach(x=>x.classList.toggle('active',x.dataset.s===id));
+      secs.forEach(s=>s.classList.toggle('show',s.id===id));
+      document.querySelector('.main').scrollTo({top:0});
+      const anc=el.dataset.anchor?document.getElementById(el.dataset.anchor):null;
+      if(anc){
+        // 强制展开锚点所在的折叠 details，否则内容 display:none 无法揭示
+        let p=anc.closest('details');
+        while(p){p.open=true;p=p.parentElement?p.parentElement.closest('details'):null;}
+        requestAnimationFrame(()=>anc.scrollIntoView({behavior:'smooth',block:'start'}));
+      }
+    });
+  });
+</script>
+</body>
+</html>
