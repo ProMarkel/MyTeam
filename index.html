@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?2755f60640ef71093b8df8309be709b9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
 <title>LSG Team · 老司机小队 | 休闲模拟经营+ 独立小队</title>
 <style>
 :root{
@@ -1908,6 +1917,7 @@ details.acc[open]>summary .ar{transform:rotate(90deg)}
       const id=a.dataset.s;
       secs.forEach(s=>s.classList.toggle('show',s.id===id));
       document.querySelector('.main').scrollTo({top:0});
+      if(window._hmt) _hmt.push(['_trackPageview','/'+id]);
     });
   });
 
